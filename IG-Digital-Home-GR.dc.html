@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://unpkg.com/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+<style>
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; padding:0; background:#000; }
+  body{ font-family:'Sora',-apple-system,sans-serif; -webkit-font-smoothing:antialiased; }
+  ::selection{ background:rgba(253,103,44,0.85); color:#000; }
+  a{ color:inherit; text-decoration:none; }
+  @media (pointer:fine){ *{ cursor:none !important; } }
+  @keyframes floaty{ 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(-14px); } }
+  @keyframes cuepulse{ 0%{ transform:translateY(0); opacity:0.6; } 50%{ transform:translateY(8px); opacity:0.15; } 100%{ transform:translateY(0); opacity:0.6; } }
+  @keyframes shimmer{ 0%{ background-position:0% 50%; } 100%{ background-position:200% 50%; } }
+</style>
+</helmet>
+
+<template id="__bundler_thumbnail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="#000"/><circle cx="50" cy="48" r="20" fill="none" stroke="url(#g)" stroke-width="3"/><circle cx="38" cy="34" r="3.2" fill="#fd672c"/><text x="50" y="78" font-family="monospace" font-size="9" letter-spacing="1.5" fill="#f5f5f7" text-anchor="middle">ig digital</text><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fd672c"/><stop offset="1" stop-color="#53d6be"/></linearGradient></defs></svg></template>
+
+<div id="igroot" style="background:#000; color:#f5f5f7; min-height:100vh; position:relative; overflow-x:hidden;">
+
+  <div id="cursor-ring" style="position:fixed; top:0; left:0; width:38px; height:38px; border:1px solid rgba(245,245,247,0.55); border-radius:50%; pointer-events:none; z-index:9999; transform:translate(-50%,-50%); transition:width .25s ease,height .25s ease,border-color .25s ease,background .25s ease; mix-blend-mode:difference; will-change:transform;"></div>
+  <div id="cursor-dot" style="position:fixed; top:0; left:0; width:5px; height:5px; background:#f5f5f7; border-radius:50%; pointer-events:none; z-index:9999; transform:translate(-50%,-50%); mix-blend-mode:difference; will-change:transform;"></div>
+
+  <div id="scrollbar" style="position:fixed; top:0; left:0; height:2px; width:0%; background:linear-gradient(90deg,#fd672c,#53d6be); z-index:9000;"></div>
+
+  <!-- NAV -->
+  <nav id="nav" style="position:fixed; top:0; left:0; right:0; z-index:8000; display:flex; align-items:center; justify-content:space-between; padding:22px 40px; transition:background .4s ease,backdrop-filter .4s ease,padding .4s ease,border-color .4s ease; border-bottom:1px solid rgba(255,255,255,0);">
+    <a href="#top" data-magnetic style="display:flex; align-items:baseline; gap:8px; font-weight:600; font-size:19px; letter-spacing:-0.03em;">
+      <span style="position:relative; display:inline-block;">ig<span style="position:absolute; top:0px; left:1px; width:5px; height:5px; border-radius:50%; background:linear-gradient(135deg,#fd672c,#53d6be);"></span></span>
+      <span style="font-weight:300; color:rgba(245,245,247,0.55);">digital</span>
+    </a>
+    <div style="display:flex; align-items:center; gap:38px;" data-desktop-nav>
+      <a href="#services" data-navlink style="font-size:14px; color:rgba(245,245,247,0.6); transition:color .3s;">Υπηρεσίες</a>
+      <a href="#process" data-navlink style="font-size:14px; color:rgba(245,245,247,0.6); transition:color .3s;">Διαδικασία</a>
+      <a href="#work" data-navlink style="font-size:14px; color:rgba(245,245,247,0.6); transition:color .3s;">Έργα</a>
+      <a href="#voices" data-navlink style="font-size:14px; color:rgba(245,245,247,0.6); transition:color .3s;">Μαρτυρίες</a>
+      <div style="display:flex; align-items:center; gap:9px; padding-right:2px;"><a href="IG-Digital-Home%20v2.dc.html" style="font-size:12px; font-family:'JetBrains Mono',monospace; letter-spacing:0.06em; color:rgba(245,245,247,0.45); transition:color .3s;">EN</a><span style="width:1px; height:11px; background:rgba(255,255,255,0.2);"></span><span style="font-size:12px; font-family:'JetBrains Mono',monospace; letter-spacing:0.06em; color:#f5f5f7;">ΕΛ</span></div><a href="#contact" data-magnetic style="font-size:14px; font-weight:500; padding:10px 20px; border:1px solid rgba(245,245,247,0.22); border-radius:100px; transition:background .3s,color .3s,border-color .3s; white-space:nowrap;" data-cta-pill>Δωρεάν strategy call · 30′</a>
+    </div>
+    <button data-mobile-toggle onClick="{{ toggleMenu }}" style="display:none; background:none; border:none; color:#f5f5f7; font-size:14px; font-family:'JetBrains Mono',monospace;">Menu</button>
+  </nav>
+
+  <sc-if value="{{ menuOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed; inset:0; z-index:8500; background:rgba(0,0,0,0.92); backdrop-filter:blur(24px); display:flex; flex-direction:column; justify-content:center; gap:8px; padding:48px;">
+      <button onClick="{{ closeMenu }}" style="position:absolute; top:24px; right:40px; background:none; border:none; color:#f5f5f7; font-size:14px; font-family:'JetBrains Mono',monospace;">Close</button>
+      <a href="#services" onClick="{{ closeMenu }}" style="font-size:40px; font-weight:600; letter-spacing:-0.03em;">Υπηρεσίες</a>
+      <a href="#process" onClick="{{ closeMenu }}" style="font-size:40px; font-weight:600; letter-spacing:-0.03em;">Διαδικασία</a>
+      <a href="#work" onClick="{{ closeMenu }}" style="font-size:40px; font-weight:600; letter-spacing:-0.03em;">Έργα</a>
+      <a href="#voices" onClick="{{ closeMenu }}" style="font-size:40px; font-weight:600; letter-spacing:-0.03em;">Μαρτυρίες</a>
+      <a href="#contact" onClick="{{ closeMenu }}" style="font-size:40px; font-weight:600; letter-spacing:-0.03em; color:#fd672c;">Δωρεάν strategy call · 30′</a>
+    </div>
+  </sc-if>
+
+  <!-- HERO -->
+  <header id="top" style="position:relative; min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:120px 24px 80px; overflow:hidden;">
+    <div id="cursor-glow" style="position:absolute; top:0; left:0; width:300px; height:300px; border-radius:50%; transform:translate(-50%,-50%) scale(0.6); background:radial-gradient(circle, rgba(83,214,190,0.42), rgba(253,103,44,0.22) 42%, rgba(0,0,0,0) 70%); pointer-events:none; opacity:0; filter:blur(16px); transition:opacity .45s ease, transform .5s ease; mix-blend-mode:screen; z-index:1;"></div>
+    <div style="position:absolute; top:50%; left:50%; width:900px; height:900px; max-width:120vw; transform:translate(-50%,-58%); background:radial-gradient(circle, rgba(83,214,190,0.10), rgba(253,103,44,0.06) 38%, rgba(0,0,0,0) 64%); pointer-events:none; filter:blur(8px);"></div>
+    <div id="hero-canvas-wrap" style="position:absolute; top:50%; left:50%; transform:translate(-50%,-72%); width:min(460px,74vw); height:min(460px,74vw); pointer-events:none;">
+      <canvas id="hero-canvas" style="width:100%; height:100%; display:block;"></canvas>
+    </div>
+
+    <div style="position:relative; z-index:5; display:flex; flex-direction:column; align-items:center; gap:30px; margin-top:6vh;">
+      <div data-reveal style="font-family:'JetBrains Mono',monospace; font-size:12px; letter-spacing:0.32em; text-transform:uppercase; color:rgba(245,245,247,0.5);">Digital growth studio</div>
+      <h1 data-reveal style="margin:0; font-weight:600; font-size:clamp(36px,6.2vw,90px); line-height:1.04; letter-spacing:-0.035em;">
+        <span style="display:block; white-space:nowrap;">Δεν είναι τυχαίο</span><span style="display:block; white-space:nowrap;">που είστε εδώ.</span>
+      </h1>
+      <p data-reveal style="margin:0; white-space:nowrap; font-weight:300; font-size:clamp(20px,2.6vw,34px); line-height:1.25; letter-spacing:-0.015em; color:rgba(245,245,247,0.8);">Κάποιος σχεδίασε τη <span id="hero-word" style="display:inline-block; background:linear-gradient(90deg,#fd672c,#53d6be,#fd672c); background-size:200% auto; -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; transition:opacity .4s ease; animation:shimmer 6s linear infinite;">διαδρομή</span>.</p>
+      <p data-reveal style="margin:0; font-size:clamp(15px,1.5vw,19px); font-weight:300; line-height:1.55; color:rgba(245,245,247,0.62); max-width:50ch;">Ένα διακριτικό studio για brands με φιλοδοξία. Σχεδιάζουμε την αόρατη διαδρομή από την προσοχή στην επιθυμία — και από την επιθυμία στη ζήτηση.</p>
+      <div data-reveal style="display:flex; align-items:center; gap:18px; margin-top:6px;">
+        <a href="#work" data-magnetic data-cta-primary style="display:inline-flex; align-items:center; gap:10px; padding:15px 28px; background:#f5f5f7; color:#000; border-radius:100px; font-size:15px; font-weight:500; transition:transform .3s;">Δείτε τα έργα μας <span style="font-size:13px;">→</span></a>
+        <a href="#contact" data-navlink style="font-size:15px; color:rgba(245,245,247,0.7); transition:color .3s;">Ας γνωριστούμε</a>
+      </div>
+    </div>
+
+    <div style="position:absolute; bottom:34px; left:50%; transform:translateX(-50%); display:flex; flex-direction:column; align-items:center; gap:10px;">
+      <span style="font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:0.3em; color:rgba(245,245,247,0.35);">ΚΥΛΗΣΗ</span>
+      <span style="width:1px; height:38px; background:linear-gradient(rgba(245,245,247,0.5),rgba(245,245,247,0)); animation:cuepulse 2.4s ease-in-out infinite;"></span>
+    </div>
+  </header>
+
+  <!-- TRUST / CLIENTS -->
+  <div style="border-top:1px solid rgba(255,255,255,0.06); border-bottom:1px solid rgba(255,255,255,0.06); padding:54px 40px;">
+    <div data-reveal style="text-align:center; font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.3em; text-transform:uppercase; color:rgba(245,245,247,0.32); margin-bottom:34px;">Brands που μας εμπιστεύονται</div>
+    <div data-reveal style="max-width:1100px; margin:0 auto; display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:30px 48px;">
+      <div data-client style="flex:0 0 auto; height:42px; display:flex; align-items:center; justify-content:center; opacity:0.82;"><img src="uploads/clients/kate.png" alt="Kate" style="max-height:38px; max-width:120px; object-fit:contain; display:block;" /></div>
+      <div data-client style="flex:0 0 auto; height:42px; display:flex; align-items:center; justify-content:center; opacity:0.82;"><img src="uploads/clients/filtrato.png" alt="Filtrato Water Filters" style="max-height:34px; max-width:140px; object-fit:contain; display:block;" /></div>
+      <div data-client style="flex:0 0 auto; height:42px; display:flex; align-items:center; justify-content:center; opacity:0.82;"><img src="uploads/clients/herbstore.png" alt="HerbStore.gr" style="max-height:38px; max-width:140px; object-fit:contain; display:block;" /></div>
+      <div data-client style="flex:0 0 auto; height:42px; display:flex; align-items:center; justify-content:center; opacity:0.82;"><img src="uploads/clients/linea.png" alt="Linea Strom" style="max-height:42px; max-width:110px; object-fit:contain; display:block;" /></div>
+      <div data-client style="flex:0 0 auto; height:42px; display:flex; align-items:center; justify-content:center; opacity:0.82;"><img src="uploads/clients/elvi.png" alt="elvi-architects" style="max-height:30px; max-width:140px; object-fit:contain; display:block;" /></div>
+      <div data-client style="flex:0 0 auto; height:42px; display:flex; align-items:center; justify-content:center; opacity:0.82;"><img src="uploads/clients/uwash.png" alt="U wash" style="max-height:40px; max-width:130px; object-fit:contain; display:block;" /></div>
+      <div data-client style="flex:0 0 auto; height:42px; display:flex; align-items:center; justify-content:center; opacity:0.82;"><img src="uploads/clients/papillon.png" alt="Papillon Kids" style="max-height:42px; max-width:120px; object-fit:contain; display:block;" /></div>
+      <div data-client style="flex:0 0 auto; height:42px; display:flex; align-items:center; justify-content:center; opacity:0.82;"><img src="uploads/clients/pythagoras.png" alt="Pythagoras Spray" style="max-height:40px; max-width:140px; object-fit:contain; display:block;" /></div>
+      <div data-client style="flex:0 0 auto; height:42px; display:flex; align-items:center; justify-content:center; opacity:0.82;"><img src="uploads/clients/vero.png" alt="Vero Shoes" style="max-height:42px; max-width:90px; object-fit:contain; display:block;" /></div>
+      <div data-client style="flex:0 0 auto; height:42px; display:flex; align-items:center; justify-content:center; opacity:0.82;"><img src="uploads/clients/freeshop.png" alt="Free Shop" style="max-height:42px; max-width:110px; object-fit:contain; display:block;" /></div>
+      <div data-client style="flex:0 0 auto; height:42px; display:flex; align-items:center; justify-content:center; opacity:0.82;"><img src="uploads/clients/pigikids.png" alt="Pigi Kids" style="max-height:40px; max-width:130px; object-fit:contain; display:block;" /></div>
+      <div data-client style="flex:0 0 auto; height:42px; display:flex; align-items:center; justify-content:center; opacity:0.82;"><img src="uploads/clients/flame.png" alt="Brand" style="max-height:40px; max-width:60px; object-fit:contain; display:block;" /></div>
+      <div data-client style="flex:0 0 auto; height:42px; display:flex; align-items:center; justify-content:center; opacity:0.82;"><img src="uploads/clients/quinta.png" alt="Quinta" style="max-height:34px; max-width:110px; object-fit:contain; display:block;" /></div>
+      <div data-client style="flex:0 0 auto; height:54px; display:flex; align-items:center; justify-content:center; opacity:0.82;"><img src="uploads/clients/americana_mono.png" alt="Americana Burgers & Steaks" style="max-height:54px; max-width:54px; object-fit:contain; display:block;" /></div>
+    </div>
+  </div>
+
+
+  <!-- SERVICES -->
+  <section id="services" style="position:relative; padding:160px 40px;">
+    <div style="max-width:1280px; margin:0 auto;">
+      <div style="display:flex; align-items:flex-end; justify-content:space-between; gap:32px; margin-bottom:72px; flex-wrap:wrap;">
+        <div>
+          <div data-reveal style="font-family:'JetBrains Mono',monospace; font-size:12px; letter-spacing:0.3em; text-transform:uppercase; color:rgba(245,245,247,0.45); margin-bottom:20px;">01 — Τι κάνουμε</div>
+          <h2 data-reveal style="margin:0; font-weight:600; font-size:clamp(32px,4.4vw,58px); letter-spacing:-0.03em; line-height:1.02; max-width:16ch;">Ένα πλήρες στούντιο. Επίτηδες μικρό.</h2>
+        </div>
+        <a href="IG-Digital-Services.dc.html" data-magnetic data-reveal style="display:inline-flex; align-items:center; gap:10px; font-size:14px; color:rgba(245,245,247,0.7); border:1px solid rgba(245,245,247,0.18); padding:13px 22px; border-radius:100px; transition:background .3s,color .3s,border-color .3s; white-space:nowrap;" data-cta-pill>Όλες οι υπηρεσίες <span>→</span></a>
+      </div>
+
+      <div data-services-list style="border-top:1px solid rgba(255,255,255,0.08);">
+        <a href="IG-Digital-Services.dc.html" data-service style="display:grid; grid-template-columns:64px 1.1fr 1.4fr 40px; align-items:center; gap:24px; padding:34px 0; border-bottom:1px solid rgba(255,255,255,0.08); transition:padding .4s ease; position:relative;">
+          <span class="svc-num" style="font-family:'JetBrains Mono',monospace; font-size:13px; color:rgba(245,245,247,0.35);">01</span>
+          <span class="svc-name" style="font-size:clamp(24px,2.6vw,34px); font-weight:500; letter-spacing:-0.02em; transition:transform .4s ease,color .4s ease;">Brand &amp; Ταυτότητα</span>
+          <span class="svc-desc" style="font-size:15px; font-weight:300; color:rgba(245,245,247,0.5); line-height:1.5;">Ποιοι είστε, γιατί να σας προσέξουν και πώς θα σας θυμούνται.</span>
+          <span class="svc-arrow" style="justify-self:end; font-size:20px; color:rgba(245,245,247,0.4); transition:transform .4s ease,color .4s ease;">→</span>
+        </a>
+        <a href="IG-Digital-Services.dc.html" data-service style="display:grid; grid-template-columns:64px 1.1fr 1.4fr 40px; align-items:center; gap:24px; padding:34px 0; border-bottom:1px solid rgba(255,255,255,0.08); transition:padding .4s ease; position:relative;">
+          <span class="svc-num" style="font-family:'JetBrains Mono',monospace; font-size:13px; color:rgba(245,245,247,0.35);">02</span>
+          <span class="svc-name" style="font-size:clamp(24px,2.6vw,34px); font-weight:500; letter-spacing:-0.02em; transition:transform .4s ease,color .4s ease;">Performance Media</span>
+          <span class="svc-desc" style="font-size:15px; font-weight:300; color:rgba(245,245,247,0.5); line-height:1.5;">Διαφήμιση που φέρνει πελάτες — όχι απλώς κλικ.</span>
+          <span class="svc-arrow" style="justify-self:end; font-size:20px; color:rgba(245,245,247,0.4); transition:transform .4s ease,color .4s ease;">→</span>
+        </a>
+        <a href="IG-Digital-Services.dc.html" data-service style="display:grid; grid-template-columns:64px 1.1fr 1.4fr 40px; align-items:center; gap:24px; padding:34px 0; border-bottom:1px solid rgba(255,255,255,0.08); transition:padding .4s ease; position:relative;">
+          <span class="svc-num" style="font-family:'JetBrains Mono',monospace; font-size:13px; color:rgba(245,245,247,0.35);">03</span>
+          <span class="svc-name" style="font-size:clamp(24px,2.6vw,34px); font-weight:500; letter-spacing:-0.02em; transition:transform .4s ease,color .4s ease;">SEO &amp; Ορατότητα</span>
+          <span class="svc-desc" style="font-size:15px; font-weight:300; color:rgba(245,245,247,0.5); line-height:1.5;">Να σας βρίσκουν τη στιγμή ακριβώς που σας ψάχνουν.</span>
+          <span class="svc-arrow" style="justify-self:end; font-size:20px; color:rgba(245,245,247,0.4); transition:transform .4s ease,color .4s ease;">→</span>
+        </a>
+        <a href="IG-Digital-Services.dc.html" data-service style="display:grid; grid-template-columns:64px 1.1fr 1.4fr 40px; align-items:center; gap:24px; padding:34px 0; border-bottom:1px solid rgba(255,255,255,0.08); transition:padding .4s ease; position:relative;">
+          <span class="svc-num" style="font-family:'JetBrains Mono',monospace; font-size:13px; color:rgba(245,245,247,0.35);">04</span>
+          <span class="svc-name" style="font-size:clamp(24px,2.6vw,34px); font-weight:500; letter-spacing:-0.02em; transition:transform .4s ease,color .4s ease;">Περιεχόμενο &amp; Film</span>
+          <span class="svc-desc" style="font-size:15px; font-weight:300; color:rgba(245,245,247,0.5); line-height:1.5;">Εικόνες και ιστορίες που μένουν — και μοιράζονται.</span>
+          <span class="svc-arrow" style="justify-self:end; font-size:20px; color:rgba(245,245,247,0.4); transition:transform .4s ease,color .4s ease;">→</span>
+        </a>
+        <a href="IG-Digital-Services.dc.html" data-service style="display:grid; grid-template-columns:64px 1.1fr 1.4fr 40px; align-items:center; gap:24px; padding:34px 0; border-bottom:1px solid rgba(255,255,255,0.08); transition:padding .4s ease; position:relative;">
+          <span class="svc-num" style="font-family:'JetBrains Mono',monospace; font-size:13px; color:rgba(245,245,247,0.35);">05</span>
+          <span class="svc-name" style="font-size:clamp(24px,2.6vw,34px); font-weight:500; letter-spacing:-0.02em; transition:transform .4s ease,color .4s ease;">Ψηφιακή Εμπειρία</span>
+          <span class="svc-desc" style="font-size:15px; font-weight:300; color:rgba(245,245,247,0.5); line-height:1.5;">Sites και e-shops που πουλάνε, χωρίς να φωνάζουν.</span>
+          <span class="svc-arrow" style="justify-self:end; font-size:20px; color:rgba(245,245,247,0.4); transition:transform .4s ease,color .4s ease;">→</span>
+        </a>
+        <a href="IG-Digital-Services.dc.html" data-service style="display:grid; grid-template-columns:64px 1.1fr 1.4fr 40px; align-items:center; gap:24px; padding:34px 0; border-bottom:1px solid rgba(255,255,255,0.08); transition:padding .4s ease; position:relative;">
+          <span class="svc-num" style="font-family:'JetBrains Mono',monospace; font-size:13px; color:rgba(245,245,247,0.35);">06</span>
+          <span class="svc-name" style="font-size:clamp(24px,2.6vw,34px); font-weight:500; letter-spacing:-0.02em; transition:transform .4s ease,color .4s ease;">Lifecycle &amp; CRM</span>
+          <span class="svc-desc" style="font-size:15px; font-weight:300; color:rgba(245,245,247,0.5); line-height:1.5;">Ο πρώτος πελάτης είναι η αρχή. Εμείς φέρνουμε τον δεύτερο.</span>
+          <span class="svc-arrow" style="justify-self:end; font-size:20px; color:rgba(245,245,247,0.4); transition:transform .4s ease,color .4s ease;">→</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROCESS -->
+  <section id="process" style="position:relative; padding:140px 40px; background:linear-gradient(180deg,#000,#070707,#000);">
+    <div style="max-width:1280px; margin:0 auto;">
+      <div style="margin-bottom:80px; max-width:680px;">
+        <div data-reveal style="font-family:'JetBrains Mono',monospace; font-size:12px; letter-spacing:0.3em; text-transform:uppercase; color:rgba(245,245,247,0.45); margin-bottom:20px;">02 — Διαδικασία</div>
+        <h2 data-reveal style="margin:0; font-weight:600; font-size:clamp(32px,4.4vw,58px); letter-spacing:-0.03em; line-height:1.02;">Τέσσερις κινήσεις. Ξανά και ξανά, μέχρι ν' αποδώσουν.</h2>
+      </div>
+      <div data-process style="display:grid; grid-template-columns:repeat(4,1fr); gap:28px;">
+        <div data-proc-card data-reveal style="position:relative; padding:36px 28px; border:1px solid rgba(255,255,255,0.08); border-radius:20px; background:rgba(255,255,255,0.015); min-height:300px; display:flex; flex-direction:column; justify-content:space-between; transition:transform .5s cubic-bezier(.2,.7,.2,1),border-color .5s,background .5s; will-change:transform;">
+          <span style="font-family:'JetBrains Mono',monospace; font-size:13px; color:#fd672c;">01</span>
+          <div>
+            <h3 style="margin:0 0 12px; font-size:26px; font-weight:600; letter-spacing:-0.02em;">Ακούμε</h3>
+            <p style="margin:0; font-size:14px; font-weight:300; line-height:1.55; color:rgba(245,245,247,0.55);">Μπαίνουμε στα βαθιά — η αγορά, ο ανταγωνισμός, αυτά που δεν λέγονται. Καταλαβαίνουμε πριν προτείνουμε.</p>
+          </div>
+        </div>
+        <div data-proc-card data-reveal style="position:relative; padding:36px 28px; border:1px solid rgba(255,255,255,0.08); border-radius:20px; background:rgba(255,255,255,0.015); min-height:300px; display:flex; flex-direction:column; justify-content:space-between; transition:transform .5s cubic-bezier(.2,.7,.2,1),border-color .5s,background .5s; will-change:transform;">
+          <span style="font-family:'JetBrains Mono',monospace; font-size:13px; color:#fd672c;">02</span>
+          <div>
+            <h3 style="margin:0 0 12px; font-size:26px; font-weight:600; letter-spacing:-0.02em;">Εστιάζουμε</h3>
+            <p style="margin:0; font-size:14px; font-weight:300; line-height:1.55; color:rgba(245,245,247,0.55);">Στρατηγική, τοποθέτηση και η μία ιδέα γύρω από την οποία γυρίζουν όλα. Πρώτα η καθαρότητα, μετά η αισθητική.</p>
+          </div>
+        </div>
+        <div data-proc-card data-reveal style="position:relative; padding:36px 28px; border:1px solid rgba(255,255,255,0.08); border-radius:20px; background:rgba(255,255,255,0.015); min-height:300px; display:flex; flex-direction:column; justify-content:space-between; transition:transform .5s cubic-bezier(.2,.7,.2,1),border-color .5s,background .5s; will-change:transform;">
+          <span style="font-family:'JetBrains Mono',monospace; font-size:13px; color:#53d6be;">03</span>
+          <div>
+            <h3 style="margin:0 0 12px; font-size:26px; font-weight:600; letter-spacing:-0.02em;">Χτίζουμε</h3>
+            <p style="margin:0; font-size:14px; font-weight:300; line-height:1.55; color:rgba(245,245,247,0.55);">Σχεδιασμός, παραγωγή και υλοποίηση — σε επίπεδο που το νιώθεις στη λεπτομέρεια.</p>
+          </div>
+        </div>
+        <div data-proc-card data-reveal style="position:relative; padding:36px 28px; border:1px solid rgba(255,255,255,0.08); border-radius:20px; background:rgba(255,255,255,0.015); min-height:300px; display:flex; flex-direction:column; justify-content:space-between; transition:transform .5s cubic-bezier(.2,.7,.2,1),border-color .5s,background .5s; will-change:transform;">
+          <span style="font-family:'JetBrains Mono',monospace; font-size:13px; color:#53d6be;">04</span>
+          <div>
+            <h3 style="margin:0 0 12px; font-size:26px; font-weight:600; letter-spacing:-0.02em;">Κλιμακώνουμε</h3>
+            <p style="margin:0; font-size:14px; font-weight:300; line-height:1.55; color:rgba(245,245,247,0.55);">Μετράμε, διορθώνουμε, επενδύουμε ξανά. Μικρά προβαδίσματα που γίνονται απόσταση.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EDGE / STRENGTHS -->
+  <section id="edge" style="position:relative; padding:160px 40px; overflow:hidden;">
+    <div style="position:absolute; top:10%; right:-5%; width:680px; height:680px; max-width:80vw; background:radial-gradient(circle, rgba(253,103,44,0.08), rgba(83,214,190,0.05) 45%, rgba(0,0,0,0) 70%); pointer-events:none;"></div>
+    <div style="max-width:1280px; margin:0 auto; position:relative; z-index:2;">
+      <div style="display:grid; grid-template-columns:0.95fr 1.05fr; gap:64px; align-items:start;">
+        <div>
+          <div data-reveal style="font-family:'JetBrains Mono',monospace; font-size:12px; letter-spacing:0.3em; text-transform:uppercase; color:rgba(245,245,247,0.45); margin-bottom:24px;">Η ειδικότητά μας</div>
+          <h2 data-reveal style="margin:0 0 28px; font-weight:600; font-size:clamp(32px,4.4vw,58px); letter-spacing:-0.03em; line-height:1.03;">Performance που<br>κλιμακώνεται.</h2>
+          <p data-reveal style="margin:0; font-size:17px; font-weight:300; line-height:1.6; color:rgba(245,245,247,0.6); max-width:42ch;">Δεν «τρέχουμε διαφημίσεις». Στήνουμε καμπάνιες απόδοσης με χειρουργική στόχευση, και κλιμακώνουμε την επένδυση μόνο όταν τα νούμερα το επιτρέπουν — η ανάπτυξη χτίζεται, δεν τυχαίνει.</p>
+          <p data-reveal style="margin:18px 0 0; font-size:14px; font-weight:300; line-height:1.6; color:rgba(245,245,247,0.42);">Μπροστά στην τεχνολογία και στη νέα εποχή των AI search & AI εργαλείων — στην ορατότητα και στην πώληση.</p>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:18px;">
+          <div data-reveal data-proc-card style="padding:30px 26px; border:1px solid rgba(255,255,255,0.08); border-radius:18px; background:rgba(255,255,255,0.015); transition:transform .5s cubic-bezier(.2,.7,.2,1),border-color .5s,background .5s;">
+            <span style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#fd672c;">01</span>
+            <h3 style="margin:18px 0 10px; font-size:21px; font-weight:600; letter-spacing:-0.02em;">Performance Campaigns</h3>
+            <p style="margin:0; font-size:14px; font-weight:300; line-height:1.55; color:rgba(245,245,247,0.55);">Καμπάνιες με μετρήσιμο ROAS — κάθε ευρώ έχει στόχο, κάθε αποτέλεσμα έχει εξήγηση.</p>
+          </div>
+          <div data-reveal data-proc-card style="padding:30px 26px; border:1px solid rgba(255,255,255,0.08); border-radius:18px; background:rgba(255,255,255,0.015); transition:transform .5s cubic-bezier(.2,.7,.2,1),border-color .5s,background .5s;">
+            <span style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#fd672c;">02</span>
+            <h3 style="margin:18px 0 10px; font-size:21px; font-weight:600; letter-spacing:-0.02em;">Ακριβής στόχευση</h3>
+            <p style="margin:0; font-size:14px; font-weight:300; line-height:1.55; color:rgba(245,245,247,0.55);">Το σωστό μήνυμα, στο σωστό κοινό, τη σωστή στιγμή. Λιγότερη σπατάλη, περισσότερη πρόθεση.</p>
+          </div>
+          <div data-reveal data-proc-card style="padding:30px 26px; border:1px solid rgba(255,255,255,0.08); border-radius:18px; background:rgba(255,255,255,0.015); transition:transform .5s cubic-bezier(.2,.7,.2,1),border-color .5s,background .5s;">
+            <span style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#53d6be;">03</span>
+            <h3 style="margin:18px 0 10px; font-size:21px; font-weight:600; letter-spacing:-0.02em;">Scaling επένδυσης</h3>
+            <p style="margin:0; font-size:14px; font-weight:300; line-height:1.55; color:rgba(245,245,247,0.55);">Αυξάνουμε το budget χωρίς να πέφτει η απόδοση — κλιμάκωση με δεδομένα, όχι με αισιοδοξία.</p>
+          </div>
+          <div data-reveal data-proc-card style="padding:30px 26px; border:1px solid rgba(255,255,255,0.08); border-radius:18px; background:rgba(255,255,255,0.015); transition:transform .5s cubic-bezier(.2,.7,.2,1),border-color .5s,background .5s;">
+            <span style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#53d6be;">04</span>
+            <h3 style="margin:18px 0 10px; font-size:21px; font-weight:600; letter-spacing:-0.02em;">SEO · GEO · AI αναζήτηση</h3>
+            <p style="margin:0; font-size:14px; font-weight:300; line-height:1.55; color:rgba(245,245,247,0.55);">Ορατότητα εκεί που μετράει — στην αναζήτηση, στον χάρτη, και πλέον μέσα στις απαντήσεις των AI μηχανών αναζήτησης.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CASE STUDIES -->
+  <section id="work" style="position:relative; padding:160px 40px;">
+    <div style="max-width:1280px; margin:0 auto;">
+      <div style="display:flex; align-items:flex-end; justify-content:space-between; gap:32px; margin-bottom:64px; flex-wrap:wrap;">
+        <div>
+          <div data-reveal style="font-family:'JetBrains Mono',monospace; font-size:12px; letter-spacing:0.3em; text-transform:uppercase; color:rgba(245,245,247,0.45); margin-bottom:20px;">03 — Επιλεγμένα έργα</div>
+          <h2 data-reveal style="margin:0; font-weight:600; font-size:clamp(32px,4.4vw,58px); letter-spacing:-0.03em; line-height:1.02;">Αποτελέσματα, όχι εντυπώσεις.</h2>
+        </div>
+      </div>
+
+      <div style="display:grid; gap:28px;">
+        <a href="IG-Digital-Case-Study.dc.html" data-case data-reveal style="position:relative; display:grid; grid-template-columns:1fr 1fr; gap:0; border:1px solid rgba(255,255,255,0.09); border-radius:24px; overflow:hidden; transition:border-color .5s, transform .5s cubic-bezier(.2,.7,.2,1); will-change:transform;">
+          <div data-case-visual style="position:relative; min-height:380px; background:radial-gradient(circle at 30% 30%, rgba(253,103,44,0.22), rgba(0,0,0,0) 60%), #060606; display:flex; align-items:center; justify-content:center; overflow:hidden;">
+            <div data-case-orb style="width:230px; height:230px; border-radius:50%; background:conic-gradient(from 120deg,#fd672c,#1a1a1a,#53d6be,#1a1a1a,#fd672c); filter:blur(2px); box-shadow:0 30px 90px rgba(253,103,44,0.25); transition:transform .6s cubic-bezier(.2,.7,.2,1); will-change:transform;"></div>
+            <span style="position:absolute; top:24px; left:26px; font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.2em; color:rgba(245,245,247,0.5);">LUXURY SKINCARE · DTC</span>
+          </div>
+          <div style="padding:48px 44px; display:flex; flex-direction:column; justify-content:space-between; gap:30px;">
+            <div>
+              <h3 style="margin:0 0 14px; font-size:clamp(28px,3vw,40px); font-weight:600; letter-spacing:-0.02em;">Έργο 01</h3>
+              <p style="margin:0; font-size:17px; font-weight:300; line-height:1.5; color:rgba(245,245,247,0.62); max-width:34ch;">Ξαναστήσαμε το e-shop γύρω από την επιθυμία. Μια εμπειρία που πουλάει πρώτα το συναίσθημα.</p>
+            </div>
+            <div style="display:flex; gap:40px; flex-wrap:wrap;">
+              <div><div style="font-size:34px; font-weight:600; letter-spacing:-0.02em;">+218%</div><div style="font-size:12px; font-family:'JetBrains Mono',monospace; color:rgba(245,245,247,0.45); margin-top:4px;">ΕΣΟΔΑ</div></div>
+              <div><div style="font-size:34px; font-weight:600; letter-spacing:-0.02em;">3.4×</div><div style="font-size:12px; font-family:'JetBrains Mono',monospace; color:rgba(245,245,247,0.45); margin-top:4px;">ΣΥΝΟΛΙΚΟ ROAS</div></div>
+              <div><div style="font-size:34px; font-weight:600; letter-spacing:-0.02em;">−41%</div><div style="font-size:12px; font-family:'JetBrains Mono',monospace; color:rgba(245,245,247,0.45); margin-top:4px;">CAC</div></div>
+            </div>
+            <span data-case-cta style="display:inline-flex; align-items:center; gap:10px; font-size:14px; color:rgba(245,245,247,0.7); transition:gap .3s,color .3s;">Δείτε το case study <span>→</span></span>
+          </div>
+        </a>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:28px;">
+          <a href="IG-Digital-Case-Study.dc.html" data-case data-reveal style="position:relative; display:flex; flex-direction:column; justify-content:space-between; gap:30px; padding:42px 40px; min-height:360px; border:1px solid rgba(255,255,255,0.09); border-radius:24px; overflow:hidden; transition:border-color .5s, transform .5s cubic-bezier(.2,.7,.2,1); background:radial-gradient(circle at 80% 0%, rgba(83,214,190,0.14), rgba(0,0,0,0) 55%), #060606; will-change:transform;">
+            <div style="display:flex; align-items:center; justify-content:space-between;">
+              <span style="font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.2em; color:rgba(245,245,247,0.5);">FINTECH</span>
+              <span data-case-orb style="width:54px; height:54px; display:flex; align-items:center; justify-content:center; transition:transform .6s cubic-bezier(.2,.7,.2,1);"><span style="width:46px; height:46px; clip-path:polygon(50% 0%, 100% 36%, 50% 100%, 0% 36%); background:conic-gradient(from 90deg at 50% 36%, #7df3dc 0deg, #2bbfa6 60deg, #0c3b35 120deg, #53d6be 180deg, #0f4a42 240deg, #2bbfa6 300deg, #7df3dc 360deg); filter:drop-shadow(0 8px 18px rgba(83,214,190,0.45)); position:relative;"><span style="position:absolute; top:0; left:0; right:0; height:36%; clip-path:polygon(50% 0%, 100% 100%, 0% 100%); background:linear-gradient(180deg, rgba(255,255,255,0.45), rgba(255,255,255,0));"></span></span></span>
+            </div>
+            <div>
+              <h3 style="margin:0 0 12px; font-size:30px; font-weight:600; letter-spacing:-0.02em;">Έργο 02</h3>
+              <p style="margin:0; font-size:15px; font-weight:300; line-height:1.5; color:rgba(245,245,247,0.6); max-width:32ch;">Ηγέτης στην κατηγορία του, ξεκάθαρος — brand, app και νέοι πελάτες, όλα ένα ενιαίο σύστημα.</p>
+            </div>
+            <div style="display:flex; gap:32px; flex-wrap:wrap;">
+              <div><div style="font-size:28px; font-weight:600;">+5.2M</div><div style="font-size:11px; font-family:'JetBrains Mono',monospace; color:rgba(245,245,247,0.45); margin-top:4px;">ΝΕΟΙ ΧΡΗΣΤΕΣ</div></div>
+              <div><div style="font-size:28px; font-weight:600;">62%</div><div style="font-size:11px; font-family:'JetBrains Mono',monospace; color:rgba(245,245,247,0.45); margin-top:4px;">ΕΝΕΡΓΟΠΟΙΗΣΗ</div></div>
+            </div>
+          </a>
+          <a href="IG-Digital-Case-Study.dc.html" data-case data-reveal style="position:relative; display:flex; flex-direction:column; justify-content:space-between; gap:30px; padding:42px 40px; min-height:360px; border:1px solid rgba(255,255,255,0.09); border-radius:24px; overflow:hidden; transition:border-color .5s, transform .5s cubic-bezier(.2,.7,.2,1); background:radial-gradient(circle at 80% 0%, rgba(253,103,44,0.14), rgba(0,0,0,0) 55%), #060606; will-change:transform;">
+            <div style="display:flex; align-items:center; justify-content:space-between;">
+              <span style="font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.2em; color:rgba(245,245,247,0.5);">HOSPITALITY</span>
+              <span data-case-orb style="width:54px; height:54px; border-radius:50%; background:radial-gradient(circle at 32% 28%, #ffc09a 0%, #fd672c 26%, #7a2d12 64%, #160b06 100%); box-shadow:inset -6px -7px 16px rgba(0,0,0,0.55), inset 4px 5px 12px rgba(255,205,175,0.32), 0 8px 22px rgba(253,103,44,0.3); transition:transform .6s cubic-bezier(.2,.7,.2,1);"></span>
+            </div>
+            <div>
+              <h3 style="margin:0 0 12px; font-size:30px; font-weight:600; letter-spacing:-0.02em;">Έργο 03</h3>
+              <p style="margin:0; font-size:15px; font-weight:300; line-height:1.5; color:rgba(245,245,247,0.6); max-width:32ch;">Sold out πριν καν ανοίξει. Μια λίστα αναμονής που έγινε συζήτηση.</p>
+            </div>
+            <div style="display:flex; gap:32px; flex-wrap:wrap;">
+              <div><div style="font-size:28px; font-weight:600;">+480%</div><div style="font-size:11px; font-family:'JetBrains Mono',monospace; color:rgba(245,245,247,0.45); margin-top:4px;">ΑΠΕΥΘΕΙΑΣ ΚΡΑΤΗΣΕΙΣ</div></div>
+              <div><div style="font-size:28px; font-weight:600;">7-ψήφιο</div><div style="font-size:11px; font-family:'JetBrains Mono',monospace; color:rgba(245,245,247,0.45); margin-top:4px;">PIPELINE</div></div>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section id="voices" style="position:relative; padding:160px 40px; background:linear-gradient(180deg,#000,#070707,#000);">
+    <div style="max-width:1100px; margin:0 auto;">
+      <div data-reveal style="font-family:'JetBrains Mono',monospace; font-size:12px; letter-spacing:0.3em; text-transform:uppercase; color:rgba(245,245,247,0.45); margin-bottom:56px; text-align:center;">04 — Μαρτυρίες</div>
+      <blockquote data-reveal style="margin:0; text-align:center; font-weight:300; font-size:clamp(26px,3.4vw,46px); line-height:1.28; letter-spacing:-0.02em; max-width:22ch; margin:0 auto; text-wrap:balance;">
+        <span style="color:rgba(245,245,247,0.95);">«Δεν κυνήγησαν την ανάπτυξή μας. Τη </span><span style="color:#53d6be;">σχεδίασαν</span><span style="color:rgba(245,245,247,0.95);">.»</span>
+      </blockquote>
+      <div data-reveal style="display:flex; align-items:center; justify-content:center; gap:14px; margin-top:40px;">
+        <span style="width:40px; height:40px; border-radius:50%; background:linear-gradient(135deg,#fd672c,#53d6be);"></span>
+        <div style="text-align:left;"><div style="font-size:15px; font-weight:500;">Dana Reyes</div><div style="font-size:13px; color:rgba(245,245,247,0.45);">Επικεφαλής Marketing, Έργο 01</div></div>
+      </div>
+
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-top:90px;">
+        <div data-reveal style="padding:36px; border:1px solid rgba(255,255,255,0.08); border-radius:20px; background:rgba(255,255,255,0.015);">
+          <p style="margin:0 0 26px; font-size:18px; font-weight:300; line-height:1.5; color:rgba(245,245,247,0.82);">«Η πιο έμπειρη ομάδα που έχουμε συνεργαστεί — και η πιο μικρή. Ό,τι άγγιξαν, έγινε πιο λιτό και πιο ακριβό.»</p>
+          <div style="display:flex; align-items:center; gap:12px;"><span style="width:34px; height:34px; border-radius:50%; background:linear-gradient(135deg,#53d6be,#fd672c);"></span><div><div style="font-size:14px; font-weight:500;">Idris Bello</div><div style="font-size:12px; color:rgba(245,245,247,0.45);">Ιδρυτής, Έργο 02</div></div></div>
+        </div>
+        <div data-reveal style="padding:36px; border:1px solid rgba(255,255,255,0.08); border-radius:20px; background:rgba(255,255,255,0.015);">
+          <p style="margin:0 0 26px; font-size:18px; font-weight:300; line-height:1.5; color:rgba(245,245,247,0.82);">«Ανοίξαμε με γεμάτες κρατήσεις. Η ig digital έκανε τη λιτότητα να μοιάζει με την πιο τολμηρή κίνηση.»</p>
+          <div style="display:flex; align-items:center; gap:12px;"><span style="width:34px; height:34px; border-radius:50%; background:linear-gradient(135deg,#fd672c,#53d6be);"></span><div><div style="font-size:14px; font-weight:500;">Sofia Lind</div><div style="font-size:12px; color:rgba(245,245,247,0.45);">CEO, Έργο 03</div></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" style="position:relative; padding:170px 40px 120px; overflow:hidden;">
+    <div style="position:absolute; bottom:-30%; left:50%; transform:translateX(-50%); width:1000px; height:700px; max-width:130vw; background:radial-gradient(ellipse at center, rgba(83,214,190,0.10), rgba(253,103,44,0.07) 40%, rgba(0,0,0,0) 70%); pointer-events:none;"></div>
+    <div style="max-width:1000px; margin:0 auto; position:relative; z-index:2; text-align:center;">
+      <div data-reveal style="font-family:'JetBrains Mono',monospace; font-size:12px; letter-spacing:0.3em; text-transform:uppercase; color:rgba(245,245,247,0.45); margin-bottom:28px;">05 — Επικοινωνία</div>
+      <h2 data-reveal style="margin:0 0 40px; font-weight:600; font-size:clamp(40px,6vw,82px); letter-spacing:-0.035em; line-height:0.98;">Ας σχεδιάσουμε κάτι<br>αξέχαστο.</h2>
+      <p data-reveal style="margin:0 auto 52px; font-size:17px; font-weight:300; color:rgba(245,245,247,0.6); max-width:44ch; line-height:1.55;">Συνεργαζόμαστε με λίγους πελάτες κάθε τρίμηνο. Πείτε μας πού θέλετε να φτάσετε.</p>
+
+      <form data-reveal onSubmit="{{ onSubmit }}" style="max-width:560px; margin:0 auto; display:flex; flex-direction:column; gap:16px; text-align:left;">
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+          <input data-field type="text" placeholder="Όνομα" style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.12); border-radius:14px; padding:16px 18px; color:#f5f5f7; font-size:15px; font-family:'Sora',sans-serif; outline:none; transition:border-color .3s,background .3s;" style-focus="border-color:rgba(83,214,190,0.6); background:rgba(255,255,255,0.06);">
+          <input data-field type="tel" placeholder="Τηλέφωνο" style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.12); border-radius:14px; padding:16px 18px; color:#f5f5f7; font-size:15px; font-family:'Sora',sans-serif; outline:none; transition:border-color .3s,background .3s;" style-focus="border-color:rgba(83,214,190,0.6); background:rgba(255,255,255,0.06);">
+        </div>
+        <input data-field type="email" placeholder="Email" style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.12); border-radius:14px; padding:16px 18px; color:#f5f5f7; font-size:15px; font-family:'Sora',sans-serif; outline:none; transition:border-color .3s,background .3s;" style-focus="border-color:rgba(83,214,190,0.6); background:rgba(255,255,255,0.06);">
+        <textarea data-field placeholder="Πείτε μας για το έργο σας" rows="3" style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.12); border-radius:14px; padding:16px 18px; color:#f5f5f7; font-size:15px; font-family:'Sora',sans-serif; outline:none; resize:none; transition:border-color .3s,background .3s;" style-focus="border-color:rgba(83,214,190,0.6); background:rgba(255,255,255,0.06);"></textarea>
+        <button type="submit" data-magnetic style="margin-top:6px; padding:17px; background:#f5f5f7; color:#000; border:none; border-radius:100px; font-size:15px; font-weight:600; font-family:'Sora',sans-serif; transition:transform .3s;">{{ submitLabel }}</button>
+      </form>
+      <div style="margin-top:40px; font-family:'JetBrains Mono',monospace; font-size:13px; color:rgba(245,245,247,0.5); display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:10px 22px;"><a href="tel:+306973789466" data-navlink style="color:#53d6be;">+30 697 378 9466</a><span style="color:rgba(245,245,247,0.25);">·</span><a href="mailto:info@igdigital.gr" data-navlink style="color:#53d6be;">info@igdigital.gr</a><span style="color:rgba(245,245,247,0.25);">·</span><span>Εδέσσης 23, Βέροια, ΤΚ 59131</span></div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer style="border-top:1px solid rgba(255,255,255,0.08); padding:60px 40px 48px;">
+    <div style="max-width:1280px; margin:0 auto; display:flex; align-items:flex-start; justify-content:space-between; gap:40px; flex-wrap:wrap;">
+      <div style="display:flex; flex-direction:column; gap:16px; max-width:280px;">
+        <a href="#top" style="display:flex; align-items:baseline; gap:8px; font-weight:600; font-size:19px; letter-spacing:-0.03em;"><span style="position:relative; display:inline-block;">ig<span style="position:absolute; top:0px; left:1px; width:5px; height:5px; border-radius:50%; background:linear-gradient(135deg,#fd672c,#53d6be);"></span></span><span style="font-weight:300; color:rgba(245,245,247,0.55);">digital</span></a>
+        <p style="margin:0; font-size:13px; font-weight:300; line-height:1.55; color:rgba(245,245,247,0.45);">Ψηφιακό στούντιο ανάπτυξης για μάρκες με φιλοδοξία.</p>
+        <p style="margin:0; font-size:13px; font-weight:300; line-height:1.55; color:rgba(245,245,247,0.45);">Εδέσσης 23, Βέροια, ΤΚ 59131</p>
+      </div>
+      <div style="display:flex; gap:56px; flex-wrap:wrap;">
+        <div style="display:flex; flex-direction:column; gap:12px;">
+          <span style="font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.2em; color:rgba(245,245,247,0.35);">ΣΤΟΥΝΤΙΟ</span>
+          <a href="IG-Digital-Services.dc.html" data-navlink style="font-size:14px; color:rgba(245,245,247,0.65);">Υπηρεσίες</a>
+          <a href="#work" data-navlink style="font-size:14px; color:rgba(245,245,247,0.65);">Έργα</a>
+          <a href="#process" data-navlink style="font-size:14px; color:rgba(245,245,247,0.65);">Διαδικασία</a>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:12px;">
+          <span style="font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.2em; color:rgba(245,245,247,0.35);">ΕΠΙΚΟΙΝΩΝΙΑ</span>
+          <a href="#contact" data-navlink style="font-size:14px; color:rgba(245,245,247,0.65);">Επικοινωνία</a>
+          <a href="tel:+306973789466" data-navlink style="font-size:14px; color:rgba(245,245,247,0.65);">+30 697 378 9466</a>
+          <a href="https://www.instagram.com/igdigitalgr/" target="_blank" rel="noopener" data-navlink style="font-size:14px; color:rgba(245,245,247,0.65);">Instagram</a>
+        </div>
+      </div>
+    </div>
+    <div style="max-width:1280px; margin:48px auto 0; padding-top:28px; border-top:1px solid rgba(255,255,255,0.06); display:flex; align-items:center; justify-content:space-between; gap:20px; flex-wrap:wrap; font-family:'JetBrains Mono',monospace; font-size:12px; color:rgba(245,245,247,0.4);">
+      <span>© 2026 ig digital</span>
+      <span>Βέροια · Ελλάδα</span>
+    </div>
+  </footer>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { menuOpen:false, submitted:false };
+
+  renderVals(){
+    return {
+      menuOpen: this.state.menuOpen,
+      toggleMenu: ()=> this.setState(s=>({menuOpen:!s.menuOpen})),
+      closeMenu: ()=> this.setState({menuOpen:false}),
+      submitLabel: this.state.submitted ? "Ευχαριστούμε — θα επικοινωνήσουμε σύντομα" : "Στείλτε το →",
+      onSubmit: (e)=>{ e.preventDefault(); this.setState({submitted:true}); }
+    };
+  }
+
+  componentDidMount(){
+    this._timers = [];
+    this._cleanups = [];
+    this._raf = null;
+    this.waitFor(()=>window.THREE, ()=>this.initHero(), 6000);
+    this.waitFor(()=>window.Lenis, ()=>this.initScroll(), 4000, ()=>this.initScrollFallback());
+    this.initCursor();
+    this.initReveals();
+    this.initMagnetic();
+    this.initWordCycle();
+    this.initNav();
+    this.initServiceRows();
+    this.initTilt();
+    this.initCursorGlow();
+  }
+
+  initCursorGlow(){
+    const header = this.q('#top');
+    const glow = this.q('#cursor-glow');
+    if(!header || !glow) return;
+    if(window.matchMedia && window.matchMedia('(pointer:coarse)').matches) return;
+    let gx=0, gy=0, tx=0, ty=0, inside=false, idle=null;
+    let lastX=0, lastY=0, lastT=0, speed=0;       // px/ms, smoothed
+    let curOpacity=0, targetOpacity=0, curScale=0.6;
+    const MIN_O=0.32, MAX_O=1.0, SPD=3.2;         // slow → subtle, fast → strong
+    const onMove=(e)=>{
+      const r = header.getBoundingClientRect();
+      const now = performance.now();
+      if(e.clientY < r.top || e.clientY > r.bottom){ inside=false; targetOpacity=0; return; }
+      const nx = e.clientX - r.left, ny = e.clientY - r.top;
+      const dt = Math.max(1, now - lastT);
+      const dist = Math.hypot(nx-lastX, ny-lastY);
+      const inst = dist/dt;                         // px per ms
+      speed = speed*0.7 + inst*0.3;                 // smooth velocity
+      lastX=nx; lastY=ny; lastT=now;
+      tx=nx; ty=ny;
+      if(!inside){ inside=true; gx=tx; gy=ty; }
+      // map speed to opacity — eased so fast moves ramp harder
+      const nrm = Math.pow(Math.min(speed,SPD)/SPD, 0.8);
+      targetOpacity = Math.min(MAX_O, MIN_O + nrm*(MAX_O-MIN_O));
+      clearTimeout(idle);
+      idle = setTimeout(()=>{ targetOpacity=0; speed=0; }, 220);
+    };
+    window.addEventListener('mousemove', onMove);
+    const loop=()=>{
+      gx += (tx-gx)*0.14; gy += (ty-gy)*0.14;
+      speed *= 0.92;                                // decay when no events
+      const nrm = Math.pow(Math.min(speed,SPD)/SPD, 0.8);
+      const drift = inside ? Math.min(targetOpacity, MIN_O + nrm*(MAX_O-MIN_O)) : 0;
+      curOpacity += (drift - curOpacity)*0.14;
+      // fast moves flare bigger and brighter
+      const targetScale = inside ? (0.74 + 0.26*(curOpacity/MAX_O) + nrm*0.34) : 0.6;
+      curScale += (targetScale - curScale)*0.14;
+      glow.style.opacity = curOpacity.toFixed(3);
+      glow.style.transform = `translate(${gx}px,${gy}px) translate(-50%,-50%) scale(${curScale.toFixed(3)})`;
+      this._glowRaf = requestAnimationFrame(loop);
+    };
+    loop();
+    this._cleanups.push(()=>{ window.removeEventListener('mousemove', onMove); if(this._glowRaf) cancelAnimationFrame(this._glowRaf); clearTimeout(idle); });
+  }
+
+  componentWillUnmount(){
+    (this._timers||[]).forEach(t=>clearInterval(t));
+    (this._cleanups||[]).forEach(fn=>{ try{fn();}catch(e){} });
+    if(this._raf) cancelAnimationFrame(this._raf);
+    if(this._heroRaf) cancelAnimationFrame(this._heroRaf);
+  }
+
+  waitFor(cond, cb, timeout, onFail){
+    const t0 = Date.now();
+    const tick = ()=>{
+      if(cond()){ try{cb();}catch(e){console.warn(e);} return; }
+      if(Date.now()-t0 > timeout){ if(onFail) onFail(); return; }
+      requestAnimationFrame(tick);
+    };
+    tick();
+  }
+
+  q(sel){ return document.querySelector(sel); }
+  qa(sel){ return Array.from(document.querySelectorAll(sel)); }
+
+  // ---------- THREE.JS HERO ----------
+  initHero(){
+    const THREE = window.THREE;
+    const canvas = this.q('#hero-canvas');
+    const wrap = this.q('#hero-canvas-wrap');
+    if(!canvas || !wrap) return;
+    const renderer = new THREE.WebGLRenderer({ canvas, alpha:true, antialias:true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio||1, 2));
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 100);
+    camera.position.z = 4.4;
+
+    scene.add(new THREE.AmbientLight(0xffffff, 0.16));
+    const dir = new THREE.DirectionalLight(0xffffff, 1.05); dir.position.set(3,4,5); scene.add(dir);
+    const pOrange = new THREE.PointLight(0xfd672c, 2.0, 14); pOrange.position.set(-4,-1.5,3); scene.add(pOrange);
+    const pTeal = new THREE.PointLight(0x53d6be, 2.0, 14); pTeal.position.set(4,2.5,-1); scene.add(pTeal);
+
+    const group = new THREE.Group();
+    scene.add(group);
+
+    let type = 'gem';
+    let basePos = null; // for orb morphing
+
+    const disposeGroup = ()=>{
+      while(group.children.length){
+        const c = group.children.pop();
+        group.remove(c);
+        if(c.geometry) c.geometry.dispose();
+        if(c.material){ if(Array.isArray(c.material)) c.material.forEach(m=>m.dispose()); else c.material.dispose(); }
+      }
+      basePos = null;
+    };
+
+    const metal = (rough)=> new THREE.MeshStandardMaterial({ color:0x0c0c0e, metalness:1.0, roughness:rough });
+
+    const build = (t)=>{
+      disposeGroup();
+      type = t;
+      group.rotation.set(0,0,0);
+      if(t === 'gem'){
+        const m = new THREE.Mesh(new THREE.IcosahedronGeometry(1.32, 1), new THREE.MeshStandardMaterial({ color:0x0c0c0e, metalness:1.0, roughness:0.26, flatShading:true }));
+        group.add(m);
+        group.add(new THREE.Mesh(new THREE.IcosahedronGeometry(1.62, 1), new THREE.MeshBasicMaterial({ color:0xffffff, wireframe:true, transparent:true, opacity:0.05 })));
+      } else if(t === 'orb'){
+        const g = new THREE.IcosahedronGeometry(1.34, 4);
+        basePos = g.attributes.position.array.slice(0);
+        group.add(new THREE.Mesh(g, metal(0.12)));
+      } else if(t === 'ring'){
+        const m = new THREE.Mesh(new THREE.TorusGeometry(1.18, 0.13, 44, 180), metal(0.16));
+        m.rotation.x = 0.62; group.add(m);
+        const halo = new THREE.Mesh(new THREE.TorusGeometry(1.55, 0.004, 8, 220), new THREE.MeshBasicMaterial({ color:0x53d6be, transparent:true, opacity:0.45 }));
+        halo.rotation.x = 0.62; group.add(halo);
+      } else if(t === 'dots'){
+        const N = 1100, R = 1.5, pos = new Float32Array(N*3);
+        for(let i=0;i<N;i++){ const y = 1-(i/(N-1))*2; const r = Math.sqrt(Math.max(0,1-y*y)); const phi = i*Math.PI*(3-Math.sqrt(5)); pos[i*3]=Math.cos(phi)*r*R; pos[i*3+1]=y*R; pos[i*3+2]=Math.sin(phi)*r*R; }
+        const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.BufferAttribute(pos,3));
+        group.add(new THREE.Points(g, new THREE.PointsMaterial({ color:0xf5f5f7, size:0.02, transparent:true, opacity:0.82 })));
+      } else if(t === 'torus'){
+        const m = new THREE.Mesh(new THREE.TorusKnotGeometry(0.92, 0.28, 220, 32, 2, 3), new THREE.MeshStandardMaterial({ color:0x0c0c0e, metalness:1.0, roughness:0.2 }));
+        group.add(m);
+      }
+      this.updateHeroPills(t);
+    };
+
+    this._buildHero = build;
+    build('gem');
+
+    const resize = ()=>{
+      const w = wrap.clientWidth, h = wrap.clientHeight;
+      if(!w||!h) return;
+      renderer.setSize(w, h, false);
+      camera.aspect = w/h; camera.updateProjectionMatrix();
+    };
+    resize();
+    const ro = new ResizeObserver(resize); ro.observe(wrap);
+    window.addEventListener('resize', resize);
+
+    const target = { x:0, y:0 };
+    const onMove = (e)=>{ target.x = (e.clientX/window.innerWidth - 0.5); target.y = (e.clientY/window.innerHeight - 0.5); };
+    window.addEventListener('mousemove', onMove);
+
+    let scrollY = 0;
+    const onScroll = ()=>{ scrollY = window.scrollY || window.pageYOffset; };
+    window.addEventListener('scroll', onScroll, {passive:true});
+
+    const clock = new THREE.Clock();
+    const loop = ()=>{
+      const t = clock.getElapsedTime();
+      // base spin + cursor parallax
+      group.rotation.y += (type==='ring'?0.006:0.0026);
+      group.rotation.x += (target.y*0.55 - group.rotation.x)*0.05;
+      group.rotation.z = type==='ring' ? group.rotation.z + 0.0015 : group.rotation.z;
+      group.position.y = Math.sin(t*0.8)*0.06 - scrollY*0.0008;
+      group.position.x = (target.x*0.4 - group.position.x)*0.05 + group.position.x;
+      group.scale.setScalar(1 + Math.sin(t*1.2)*0.012);
+
+      if(type==='orb' && basePos){
+        const mesh = group.children[0];
+        const attr = mesh.geometry.attributes.position; const arr = attr.array;
+        for(let i=0;i<arr.length;i+=3){
+          const bx=basePos[i], by=basePos[i+1], bz=basePos[i+2];
+          const n = Math.sin(bx*2.2+t*1.1) + Math.sin(by*2.6+t*0.9) + Math.sin(bz*2.4+t*1.3);
+          const d = 1 + n*0.035;
+          arr[i]=bx*d; arr[i+1]=by*d; arr[i+2]=bz*d;
+        }
+        attr.needsUpdate = true; mesh.geometry.computeVertexNormals();
+      }
+      renderer.render(scene, camera);
+      this._heroRaf = requestAnimationFrame(loop);
+    };
+    loop();
+
+    this._cleanups.push(()=>{ ro.disconnect(); window.removeEventListener('mousemove', onMove); window.removeEventListener('scroll', onScroll); window.removeEventListener('resize', resize); disposeGroup(); renderer.dispose(); });
+  }
+
+  updateHeroPills(active){
+    this.qa('[data-hero-pill]').forEach(btn=>{
+      const on = btn.getAttribute('data-hero-pill') === active;
+      btn.style.background = on ? '#f5f5f7' : 'transparent';
+      btn.style.color = on ? '#000' : 'rgba(245,245,247,0.7)';
+      btn.style.borderColor = on ? '#f5f5f7' : 'rgba(255,255,255,0.14)';
+    });
+  }
+
+  // ---------- SMOOTH SCROLL ----------
+  initScroll(){
+    const lenis = new window.Lenis({ lerp:0.085, smoothWheel:true, wheelMultiplier:1 });
+    this._lenis = lenis;
+    const raf = (time)=>{ lenis.raf(time); this.updateProgress(); this._raf = requestAnimationFrame(raf); };
+    this._raf = requestAnimationFrame(raf);
+    this.qa('a[href^="#"]').forEach(a=>{
+      a.addEventListener('click', (e)=>{
+        const id = a.getAttribute('href');
+        if(id && id.length>1){ const el = this.q(id); if(el){ e.preventDefault(); lenis.scrollTo(el, { offset:0, duration:1.3 }); } }
+      });
+    });
+  }
+  initScrollFallback(){
+    document.documentElement.style.scrollBehavior = 'smooth';
+    const onScroll = ()=> this.updateProgress();
+    window.addEventListener('scroll', onScroll, {passive:true});
+    this.updateProgress();
+  }
+  updateProgress(){
+    const bar = this.q('#scrollbar'); if(!bar) return;
+    const h = document.documentElement.scrollHeight - window.innerHeight;
+    const p = h>0 ? (window.scrollY||window.pageYOffset)/h : 0;
+    bar.style.width = (p*100).toFixed(2)+'%';
+  }
+
+  // ---------- CUSTOM CURSOR ----------
+  initCursor(){
+    if(window.matchMedia && window.matchMedia('(pointer:coarse)').matches) {
+      const r=this.q('#cursor-ring'), d=this.q('#cursor-dot'); if(r)r.style.display='none'; if(d)d.style.display='none'; return;
+    }
+    const ring = this.q('#cursor-ring'), dot = this.q('#cursor-dot');
+    if(!ring||!dot) return;
+    let mx=window.innerWidth/2, my=window.innerHeight/2, rx=mx, ry=my;
+    const onMove=(e)=>{ mx=e.clientX; my=e.clientY; dot.style.transform=`translate(${mx}px,${my}px) translate(-50%,-50%)`; };
+    window.addEventListener('mousemove', onMove);
+    const loop=()=>{ rx+=(mx-rx)*0.18; ry+=(my-ry)*0.18; ring.style.transform=`translate(${rx}px,${ry}px) translate(-50%,-50%)`; this._curRaf=requestAnimationFrame(loop); };
+    loop();
+    const grow=()=>{ ring.style.width='62px'; ring.style.height='62px'; ring.style.borderColor='rgba(83,214,190,0.9)'; ring.style.background='rgba(83,214,190,0.06)'; };
+    const shrink=()=>{ ring.style.width='38px'; ring.style.height='38px'; ring.style.borderColor='rgba(245,245,247,0.55)'; ring.style.background='transparent'; };
+    this.qa('a, button, [data-service], [data-case], [data-field], [data-magnetic]').forEach(el=>{
+      el.addEventListener('mouseenter', grow); el.addEventListener('mouseleave', shrink);
+    });
+    this._cleanups.push(()=>{ window.removeEventListener('mousemove', onMove); if(this._curRaf) cancelAnimationFrame(this._curRaf); });
+  }
+
+  // ---------- MAGNETIC ----------
+  initMagnetic(){
+    this.qa('[data-magnetic]').forEach(el=>{
+      const strength = 0.32;
+      const move=(e)=>{ const r=el.getBoundingClientRect(); const x=e.clientX-(r.left+r.width/2); const y=e.clientY-(r.top+r.height/2); el.style.transform=`translate(${x*strength}px,${y*strength}px)`; };
+      const reset=()=>{ el.style.transform='translate(0,0)'; };
+      el.addEventListener('mousemove', move); el.addEventListener('mouseleave', reset);
+    });
+  }
+
+  // ---------- REVEALS ----------
+  initReveals(){
+    const els = this.qa('[data-reveal]');
+    els.forEach(el=>{ el.style.opacity='0'; el.style.transform='translateY(26px)'; el.style.transition='opacity 1s cubic-bezier(.2,.7,.2,1), transform 1s cubic-bezier(.2,.7,.2,1)'; });
+    if(!('IntersectionObserver' in window)){ els.forEach(el=>{ el.style.opacity='1'; el.style.transform='none'; }); return; }
+    const io = new IntersectionObserver((entries)=>{
+      entries.forEach((en, i)=>{ if(en.isIntersecting){ const el=en.target; el.style.opacity='1'; el.style.transform='none'; io.unobserve(el); } });
+    }, { threshold:0.12, rootMargin:'0px 0px -8% 0px' });
+    els.forEach(el=> io.observe(el));
+    this._cleanups.push(()=> io.disconnect());
+  }
+
+  // ---------- WORD CYCLE ----------
+  initWordCycle(){
+    const el = this.q('#hero-word'); if(!el) return;
+    const words = ['διαδρομή','στρατηγική','στόχευση','διαδρομή'];
+    let i=0;
+    const t = setInterval(()=>{
+      i=(i+1)%words.length;
+      el.style.opacity='0';
+      setTimeout(()=>{ el.textContent=words[i]; el.style.opacity='1'; }, 420);
+    }, 3000);
+    this._timers.push(t);
+  }
+
+  // ---------- NAV ----------
+  initNav(){
+    const nav = this.q('#nav'); if(!nav) return;
+    const onScroll=()=>{
+      if((window.scrollY||window.pageYOffset) > 40){
+        nav.style.background='rgba(0,0,0,0.6)'; nav.style.backdropFilter='blur(20px)'; nav.style.webkitBackdropFilter='blur(20px)'; nav.style.padding='16px 40px'; nav.style.borderBottomColor='rgba(255,255,255,0.07)';
+      } else {
+        nav.style.background='rgba(0,0,0,0)'; nav.style.backdropFilter='none'; nav.style.webkitBackdropFilter='none'; nav.style.padding='22px 40px'; nav.style.borderBottomColor='rgba(255,255,255,0)';
+      }
+    };
+    window.addEventListener('scroll', onScroll, {passive:true}); onScroll();
+    this._cleanups.push(()=> window.removeEventListener('scroll', onScroll));
+  }
+
+  // ---------- SERVICE ROW HOVER ----------
+  initServiceRows(){
+    this.qa('[data-service]').forEach(row=>{
+      const name = row.querySelector('.svc-name');
+      const arrow = row.querySelector('.svc-arrow');
+      row.addEventListener('mouseenter', ()=>{ row.style.paddingLeft='18px'; if(name){name.style.transform='translateX(4px)'; name.style.color='#f5f5f7';} if(arrow){arrow.style.transform='translateX(8px)'; arrow.style.color='#53d6be';} });
+      row.addEventListener('mouseleave', ()=>{ row.style.paddingLeft='0'; if(name){name.style.transform='translateX(0)';} if(arrow){arrow.style.transform='translateX(0)'; arrow.style.color='rgba(245,245,247,0.4)';} });
+    });
+  }
+
+  // ---------- 3D TILT (process + case cards) ----------
+  initTilt(){
+    this.qa('[data-proc-card], [data-case]').forEach(card=>{
+      const orb = card.querySelector('[data-case-orb]');
+      const move=(e)=>{
+        const r=card.getBoundingClientRect();
+        const px=(e.clientX-r.left)/r.width-0.5;
+        const py=(e.clientY-r.top)/r.height-0.5;
+        card.style.transform=`perspective(900px) rotateX(${-py*4}deg) rotateY(${px*4}deg) translateY(-4px)`;
+        card.style.borderColor='rgba(255,255,255,0.18)';
+        if(orb) orb.style.transform=`translate(${px*18}px,${py*18}px) scale(1.05)`;
+      };
+      const reset=()=>{ card.style.transform='perspective(900px) rotateX(0) rotateY(0) translateY(0)'; card.style.borderColor='rgba(255,255,255,0.09)'; if(orb) orb.style.transform='translate(0,0) scale(1)'; };
+      card.addEventListener('mousemove', move); card.addEventListener('mouseleave', reset);
+    });
+  }
+}
+</script>
+</body>
+</html>
