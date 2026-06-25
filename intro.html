@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ig digital</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; background: #000; overflow: hidden; }
+    body { font-family: 'Sora', -apple-system, sans-serif; -webkit-font-smoothing: antialiased; }
+
+    #wrap {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #000;
+    }
+
+    canvas {
+      position: absolute;
+      inset: 0;
+      display: block;
+    }
+
+    /* ---- LOGO ---- */
+    #logo {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      gap: clamp(10px, 1.6vw, 18px);
+      opacity: 0;
+      will-change: transform, opacity;
+    }
+
+    .ig-mark {
+      position: relative;
+      display: inline-block;
+    }
+
+    .ig-text {
+      font-size: clamp(46px, 7.5vw, 96px);
+      font-weight: 600;
+      letter-spacing: -0.045em;
+      color: #f5f5f7;
+      line-height: 1;
+      display: block;
+    }
+
+    /* The gradient orb — same as nav, but em-scaled for the large size */
+    .ig-orb {
+      position: absolute;
+      top: 0.10em;
+      left: 0.055em;
+      width: 0.155em;
+      height: 0.155em;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #fd672c, #53d6be);
+      opacity: 0;
+      transform: scale(0);
+      transform-origin: center;
+      will-change: transform, opacity;
+    }
+
+    .digital-text {
+      font-size: clamp(46px, 7.5vw, 96px);
+      font-weight: 300;
+      letter-spacing: -0.03em;
+      color: rgba(245, 245, 247, 0.42);
+      line-height: 1;
+    }
+
+    /* Subtle tagline below */
+    #tagline {
+      position: absolute;
+      top: calc(100% + clamp(16px, 2.6vw, 26px));
+      left: 50%;
+      transform: translateX(-50%);
+      white-space: nowrap;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: clamp(9px, 1vw, 11px);
+      letter-spacing: 0.38em;
+      text-transform: uppercase;
+      color: rgba(245, 245, 247, 0.55);
+      opacity: 0;
+      will-change: opacity;
+    }
+
+    /* Skip */
+    #skip {
+      position: fixed;
+      bottom: 28px;
+      right: 32px;
+      z-index: 20;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: rgba(245, 245, 247, 0.22);
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 8px 0;
+      opacity: 0;
+      transition: color 0.3s;
+      will-change: opacity;
+    }
+    #skip:hover { color: rgba(245, 245, 247, 0.6); }
+  </style>
+</head>
+<body>
+
+<div id="wrap">
+  <canvas id="c"></canvas>
+
+  <div id="logo">
+    <span class="ig-mark">
+      <span class="ig-text">ig</span>
+      <div class="ig-orb"></div>
+    </span>
+    <span class="digital-text">digital</span>
+    <span id="tagline">digital growth studio</span>
+  </div>
+</div>
+
+<button id="skip">Skip →</button>
+
+<script>
+// Skip intro on same-session revisits (refresh, back button)
+if (sessionStorage.getItem('ig-intro-done')) {
+  window.location.replace('IG-Digital-Home.dc.html');
+}
+
+// ---- MATH UTILS ----
+function easeCustom(p, g) {
+  // Symmetric power ease (same as original component)
+  if (p < 0.5) return 0.5 * Math.pow(2 * p, g);
+  return 1 - 0.5 * Math.pow(2 * (1 - p), g);
+}
+
+function clamp(v, lo, hi) { return Math.min(Math.max(v, lo), hi); }
+
+// Seeded RNG — same approach as original, gives consistent particles every load
+let _seed = 1234;
+function rand() {
+  _seed = (_seed * 9301 + 49297) % 233280;
+  return _seed / 233280;
+}
+
+// ---- ARCHIMEDEAN SPIRAL ----
+// r = R·√p,  θ = 2π·N·√p  (same math as original component)
+function spiralPos(p, R) {
+  p = clamp(1.2 * p, 0, 1);
+  p = easeCustom(p, 1.8);
+  const theta = 2 * Math.PI * 5.5 * Math.sqrt(p); // 5.5 turns
+  const r = R * Math.sqrt(p);
+  return { x: r * Math.cos(theta), y: r * Math.sin(theta) };
+}
+
+// ---- CANVAS SETUP ----
+const canvas = document.getElementById('c');
+const ctx    = canvas.getContext('2d');
+let W, H, cx, cy, R;
+
+function resize() {
+  const dpr = window.devicePixelRatio || 1;
+  W = window.innerWidth;
+  H = window.innerHeight;
+  canvas.width  = W * dpr;
+  canvas.height = H * dpr;
+  canvas.style.width  = W + 'px';
+  canvas.style.height = H + 'px';
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0); // clean scale, clears prior transforms
+  cx = W / 2;
+  cy = H / 2;
+  R  = Math.min(W, H) * 0.37;
+}
+
+resize();
+window.addEventListener('resize', resize);
+
+// ---- PARTICLES ----
+// Seeded so positions are always identical (no flash of wrong particles on load)
+const N_PARTS = 700;
+const parts   = [];
+
+for (let i = 0; i < N_PARTS; i++) {
+  // Cluster particles along the spiral (non-uniform, more dense toward center)
+  const loc = Math.min((1 - Math.pow(1 - rand(), 2.6)) * 0.96, 0.97);
+  parts.push({
+    loc,                          // position on spiral (0–1)
+    angle:   rand() * Math.PI * 2,
+    dist:    10 + rand() * 30,   // drift distance (px at unit R)
+    size:    Math.pow(rand(), 1.5), // 0–1, most are small
+    expRate: 0.9 + rand() * 0.8, // expansion speed multiplier
+    col:     rand(),              // 0=teal, 0.4-0.6=white, 1=orange
+    alpha:   0.4 + rand() * 0.6,
+  });
+}
+
+// ---- RENDER ----
+const state = { t: 0 };
+
+function render() {
+  const t = state.t; // 0 → 1 over TOTAL_DUR seconds
+  if (t === 0) return;
+
+  ctx.fillStyle = '#000';
+  ctx.fillRect(0, 0, W, H);
+
+  ctx.save();
+  ctx.translate(cx, cy);
+  ctx.rotate(-Math.PI * 0.08 * t); // subtle cinematic rotation
+
+  const headP = Math.min(t * 0.9, 1); // where the spiral head is
+
+  // ---- BACKGROUND RADIAL GLOW ----
+  const gA = Math.min(t * 4, 1) * 0.22;
+  const bg = ctx.createRadialGradient(0, 0, 0, 0, 0, R * 0.75);
+  bg.addColorStop(0,    `rgba(83,214,190,${gA})`);
+  bg.addColorStop(0.35, `rgba(253,103,44,${gA * 0.4})`);
+  bg.addColorStop(1,    'rgba(0,0,0,0)');
+  ctx.fillStyle = bg;
+  ctx.beginPath();
+  ctx.arc(0, 0, R * 0.75, 0, Math.PI * 2);
+  ctx.fill();
+
+  // ---- PARTICLES ----
+  for (const p of parts) {
+    const wakeAt = p.loc / 0.9; // the `t` value when head reaches this particle
+    if (t < wakeAt) continue;
+
+    const age     = (t - wakeAt) * 2.8; // 0→1 in ~0.36s, then fades
+    if (age > 2.6) continue;
+
+    const prog = Math.min(age, 1);
+    const sp   = spiralPos(p.loc, R);
+    const ox   = Math.cos(p.angle) * p.dist * prog * p.expRate;
+    const oy   = Math.sin(p.angle) * p.dist * prog * p.expRate;
+
+    // Opacity arc: fade in, hold, fade out
+    const fadeA = p.alpha * Math.sin(Math.PI * Math.min(age / 1.6, 1)) * 0.9;
+    const r2    = Math.max(0.3, p.size * 2.4 * (1 - prog * 0.35));
+
+    if      (p.col < 0.38) ctx.fillStyle = `rgba(83,214,190,${fadeA})`;
+    else if (p.col < 0.58) ctx.fillStyle = `rgba(245,245,247,${fadeA * 0.55})`;
+    else                   ctx.fillStyle = `rgba(253,103,44,${fadeA})`;
+
+    ctx.beginPath();
+    ctx.arc(sp.x + ox, sp.y + oy, r2, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  // ---- SPIRAL TRAIL ----
+  // 70-segment glowing tail behind the head
+  const TRAIL = 70;
+  for (let i = 0; i < TRAIL; i++) {
+    const pp = headP - (i / TRAIL) * 0.07;
+    if (pp < 0) break;
+
+    const { x, y } = spiralPos(pp, R);
+    const f  = 1 - i / TRAIL;           // 1 at head, 0 at tail
+    const br = Math.round(245 * f);
+    const a  = 0.92 * Math.pow(f, 0.65);
+    const dr = 1.9 * f + 0.25;
+
+    ctx.shadowBlur   = 12 * f;
+    ctx.shadowColor  = `rgba(200,240,235,${f * 0.55})`;
+    ctx.fillStyle    = `rgba(${br},${br},${br},${a})`;
+    ctx.beginPath();
+    ctx.arc(x, y, dr, 0, Math.PI * 2);
+    ctx.fill();
+  }
+  ctx.shadowBlur = 0;
+
+  // ---- CENTER ANCHOR GLOW ----
+  // A small pulsing orb at the origin (where the spiral starts)
+  const cA  = Math.min(t * 8, 1);
+  const cR  = R * 0.022 * (1 + 0.3 * Math.sin(t * 22));
+  const cGr = ctx.createRadialGradient(0, 0, 0, 0, 0, cR * 6);
+  cGr.addColorStop(0,   `rgba(245,245,247,${cA})`);
+  cGr.addColorStop(0.25,`rgba(83,214,190,${cA * 0.55})`);
+  cGr.addColorStop(1,   'rgba(0,0,0,0)');
+  ctx.fillStyle = cGr;
+  ctx.beginPath();
+  ctx.arc(0, 0, cR * 6, 0, Math.PI * 2);
+  ctx.fill();
+
+  ctx.restore();
+}
+
+// ---- NAVIGATION ----
+function navigateToSite() {
+  sessionStorage.setItem('ig-intro-done', '1');
+  window.location.href = 'IG-Digital-Home.dc.html';
+}
+
+// ---- GSAP TIMELINE ----
+const logo    = document.getElementById('logo');
+const orb     = document.querySelector('.ig-orb');
+const tagline = document.getElementById('tagline');
+const skipBtn = document.getElementById('skip');
+
+// Initial state (GSAP will animate FROM these)
+gsap.set(logo, { y: 10, opacity: 0 });
+
+const TOTAL = 5.2; // seconds
+
+const tl = gsap.timeline({ onComplete: navigateToSite });
+
+// Main spiral animation — runs the full duration
+tl.to(state, {
+  t: 1,
+  duration: TOTAL,
+  ease: 'none',
+  onUpdate: render,
+}, 0);
+
+// Skip button fades in at 0.9s
+tl.to(skipBtn, {
+  opacity: 1,
+  duration: 0.5,
+  ease: 'power2.out',
+}, 0.9);
+
+// Logo appears at 2.4s — spiral is ~47% drawn, looks substantial
+tl.to(logo, {
+  opacity: 1,
+  y: 0,
+  duration: 0.9,
+  ease: 'power3.out',
+}, 2.4);
+
+// Orb pops in 0.45s after logo
+tl.to(orb, {
+  opacity: 1,
+  scale: 1,
+  duration: 0.42,
+  ease: 'back.out(2.2)',
+}, 2.85);
+
+// Tagline appears at 3.5s
+tl.to(tagline, {
+  opacity: 1,
+  duration: 0.65,
+  ease: 'power2.out',
+}, 3.5);
+
+// Fade everything out at 4.4s
+tl.to(['#wrap', '#skip'], {
+  opacity: 0,
+  duration: 0.68,
+  ease: 'power2.in',
+}, 4.4);
+
+// Skip button
+skipBtn.addEventListener('click', () => {
+  tl.kill();
+  gsap.to(['#wrap', '#skip'], { opacity: 0, duration: 0.35, ease: 'power2.in', onComplete: navigateToSite });
+});
+
+// Fallback: if GSAP never loaded (CDN down), navigate after 6s
+setTimeout(() => {
+  if (state.t < 0.01) navigateToSite();
+}, 6000);
+</script>
+
+</body>
+</html>

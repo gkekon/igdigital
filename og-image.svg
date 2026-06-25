@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="page" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#070707"/>
+      <stop offset="1" stop-color="#000000"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="38%" r="55%">
+      <stop offset="0" stop-color="#fd672c" stop-opacity="0.16"/>
+      <stop offset="45%" stop-color="#53d6be" stop-opacity="0.08"/>
+      <stop offset="70%" stop-color="#000000" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="tile" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#161616"/>
+      <stop offset="1" stop-color="#0a0a0a"/>
+    </linearGradient>
+    <linearGradient id="dot" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#fd672c"/>
+      <stop offset="1" stop-color="#53d6be"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#page)"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+
+  <!-- monogram tile -->
+  <g transform="translate(490,150)">
+    <rect x="0" y="0" width="220" height="220" rx="58" fill="url(#tile)" stroke="#ffffff" stroke-opacity="0.08"/>
+    <text x="98" y="120" text-anchor="middle" dominant-baseline="central" font-family="Helvetica, Arial, sans-serif" font-weight="700" font-size="108" letter-spacing="-6" fill="#f5f5f7">ig</text>
+    <circle cx="158" cy="158" r="11" fill="url(#dot)"/>
+  </g>
+
+  <!-- wordmark -->
+  <text x="600" y="455" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-weight="600" font-size="62" letter-spacing="-2" fill="#f5f5f7">ig digital</text>
+
+  <!-- tagline -->
+  <text x="600" y="512" text-anchor="middle" font-family="'JetBrains Mono', monospace, Courier" font-weight="400" font-size="22" letter-spacing="8" fill="#9a9a9e">DIGITAL GROWTH STUDIO</text>
+</svg>

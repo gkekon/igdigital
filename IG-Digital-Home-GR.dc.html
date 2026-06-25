@@ -8,6 +8,20 @@
 <body>
 <x-dc>
 <helmet>
+<title>ig digital — Ψηφιακό Στούντιο Ανάπτυξης</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta name="description" content="Ένα διακριτικό studio για brands με φιλοδοξία. Μετατρέπουμε την προσοχή, την επιθυμία και τη ζήτηση σε συστήματα που αποδίδουν.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://igdigital.netlify.app/IG-Digital-Home-GR.dc.html">
+<meta property="og:title" content="ig digital — Ψηφιακό Στούντιο Ανάπτυξης">
+<meta property="og:description" content="Ένα διακριτικό studio για brands με φιλοδοξία. Μετατρέπουμε την προσοχή, την επιθυμία και τη ζήτηση σε συστήματα που αποδίδουν.">
+<meta property="og:image" content="https://igdigital.netlify.app/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="ig digital — Ψηφιακό Στούντιο Ανάπτυξης">
+<meta name="twitter:description" content="Ένα διακριτικό studio για brands με φιλοδοξία.">
+<meta name="twitter:image" content="https://igdigital.netlify.app/og-image.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -23,6 +37,46 @@
   @keyframes floaty{ 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(-14px); } }
   @keyframes cuepulse{ 0%{ transform:translateY(0); opacity:0.6; } 50%{ transform:translateY(8px); opacity:0.15; } 100%{ transform:translateY(0); opacity:0.6; } }
   @keyframes shimmer{ 0%{ background-position:0% 50%; } 100%{ background-position:200% 50%; } }
+
+  /* ---------- MOBILE / RESPONSIVE ---------- */
+  @media (max-width:760px){
+    [data-desktop-nav]{ display:none !important; }
+    [data-mobile-toggle]{ display:block !important; }
+    [data-mobile-nav-right]{ display:flex !important; }
+    [data-overlay-lang]{ display:none !important; }
+    #nav{ padding:16px 20px !important; }
+
+    /* collapse all multi-column grids to a single column */
+    [style*="grid-template-columns"]{ grid-template-columns:1fr !important; }
+
+    /* services list: keep number + name + arrow, drop the long description */
+    [data-service]{ grid-template-columns:30px 1fr 22px !important; gap:16px !important; padding:24px 0 !important; }
+    .svc-desc{ display:none !important; }
+    .svc-name{ font-size:22px !important; }
+
+    /* section spacing */
+    section[id]{ padding-left:22px !important; padding-right:22px !important; padding-top:90px !important; padding-bottom:90px !important; }
+    #contact{ padding-bottom:80px !important; }
+    footer{ padding:48px 22px 40px !important; }
+    [style*="padding:54px 40px"]{ padding:40px 22px !important; }   /* trust / clients strip */
+
+    /* hero spacing + stack the CTA buttons */
+    #top{ padding-left:20px !important; padding-right:20px !important; }
+    #top div:has(> [data-cta-primary]){ flex-direction:column !important; gap:14px !important; }
+
+    /* case study hero card: shorter visual when stacked */
+    [data-case-visual]{ min-height:240px !important; }
+
+    /* client logos: show ~3 rows, expandable */
+    [data-clients]{ gap:24px 36px !important; }
+    [data-clients].collapsed{ max-height:172px; overflow:hidden; -webkit-mask-image:linear-gradient(#000 66%, transparent); mask-image:linear-gradient(#000 66%, transparent); }
+    [data-clients-toggle]{ display:inline-block !important; }
+
+    /* process: more compact cards, less empty space */
+    [data-process]{ gap:14px !important; }
+    #process [data-proc-card]{ min-height:0 !important; padding:24px 22px !important; }
+    #process [data-proc-card] h3{ margin-bottom:8px !important; }
+  }
 </style>
 </helmet>
 
@@ -48,7 +102,7 @@
       <a href="#voices" data-navlink style="font-size:14px; color:rgba(245,245,247,0.6); transition:color .3s;">Μαρτυρίες</a>
       <div style="display:flex; align-items:center; gap:9px; padding-right:2px;"><a href="IG-Digital-Home.dc.html" style="font-size:12px; font-family:'JetBrains Mono',monospace; letter-spacing:0.06em; color:rgba(245,245,247,0.45); transition:color .3s;">EN</a><span style="width:1px; height:11px; background:rgba(255,255,255,0.2);"></span><span style="font-size:12px; font-family:'JetBrains Mono',monospace; letter-spacing:0.06em; color:#f5f5f7;">ΕΛ</span></div><a href="#contact" data-magnetic style="font-size:14px; font-weight:500; padding:10px 20px; border:1px solid rgba(245,245,247,0.22); border-radius:100px; transition:background .3s,color .3s,border-color .3s; white-space:nowrap;" data-cta-pill>Δωρεάν strategy call · 30′</a>
     </div>
-    <button data-mobile-toggle onClick="{{ toggleMenu }}" style="display:none; background:none; border:none; color:#f5f5f7; font-size:14px; font-family:'JetBrains Mono',monospace;">Menu</button>
+    <div data-mobile-nav-right style="display:none; align-items:center; gap:14px;"><div style="display:flex; align-items:center; gap:9px; padding-right:2px;"><a href="IG-Digital-Home.dc.html" style="font-size:12px; font-family:'JetBrains Mono',monospace; letter-spacing:0.06em; color:rgba(245,245,247,0.45); transition:color .3s;">EN</a><span style="width:1px; height:11px; background:rgba(255,255,255,0.2);"></span><span style="font-size:12px; font-family:'JetBrains Mono',monospace; letter-spacing:0.06em; color:#f5f5f7;">ΕΛ</span></div><button data-mobile-toggle onClick="{{ toggleMenu }}" style="background:none; border:none; color:#f5f5f7; font-size:14px; font-family:'JetBrains Mono',monospace; padding:0; cursor:pointer;">Menu</button></div>
   </nav>
 
   <sc-if value="{{ menuOpen }}" hint-placeholder-val="{{ false }}">
@@ -92,22 +146,23 @@
   <!-- TRUST / CLIENTS -->
   <div style="border-top:1px solid rgba(255,255,255,0.06); border-bottom:1px solid rgba(255,255,255,0.06); padding:54px 40px;">
     <div data-reveal style="text-align:center; font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.3em; text-transform:uppercase; color:rgba(245,245,247,0.32); margin-bottom:34px;">Brands που μας εμπιστεύονται</div>
-    <div data-reveal style="max-width:1100px; margin:0 auto; display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:30px 48px;">
-      <div data-client style="flex:0 0 auto; height:42px; display:flex; align-items:center; justify-content:center; opacity:0.82;"><img src="uploads/clients/kate.png" alt="Kate" style="max-height:38px; max-width:120px; object-fit:contain; display:block;" /></div>
-      <div data-client style="flex:0 0 auto; height:42px; display:flex; align-items:center; justify-content:center; opacity:0.82;"><img src="uploads/clients/filtrato.png" alt="Filtrato Water Filters" style="max-height:34px; max-width:140px; object-fit:contain; display:block;" /></div>
+    <div data-clients data-reveal style="max-width:1100px; margin:0 auto; display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:30px 48px;">
       <div data-client style="flex:0 0 auto; height:42px; display:flex; align-items:center; justify-content:center; opacity:0.82;"><img src="uploads/clients/herbstore.png" alt="HerbStore.gr" style="max-height:38px; max-width:140px; object-fit:contain; display:block;" /></div>
-      <div data-client style="flex:0 0 auto; height:42px; display:flex; align-items:center; justify-content:center; opacity:0.82;"><img src="uploads/clients/linea.png" alt="Linea Strom" style="max-height:42px; max-width:110px; object-fit:contain; display:block;" /></div>
-      <div data-client style="flex:0 0 auto; height:42px; display:flex; align-items:center; justify-content:center; opacity:0.82;"><img src="uploads/clients/elvi.png" alt="elvi-architects" style="max-height:30px; max-width:140px; object-fit:contain; display:block;" /></div>
-      <div data-client style="flex:0 0 auto; height:42px; display:flex; align-items:center; justify-content:center; opacity:0.82;"><img src="uploads/clients/uwash.png" alt="U wash" style="max-height:40px; max-width:130px; object-fit:contain; display:block;" /></div>
       <div data-client style="flex:0 0 auto; height:42px; display:flex; align-items:center; justify-content:center; opacity:0.82;"><img src="uploads/clients/papillon.png" alt="Papillon Kids" style="max-height:42px; max-width:120px; object-fit:contain; display:block;" /></div>
       <div data-client style="flex:0 0 auto; height:42px; display:flex; align-items:center; justify-content:center; opacity:0.82;"><img src="uploads/clients/pythagoras.png" alt="Pythagoras Spray" style="max-height:40px; max-width:140px; object-fit:contain; display:block;" /></div>
+      <div data-client style="flex:0 0 auto; height:42px; display:flex; align-items:center; justify-content:center; opacity:0.82;"><img src="uploads/clients/uwash.png" alt="U wash" style="max-height:40px; max-width:130px; object-fit:contain; display:block;" /></div>
+      <div data-client style="flex:0 0 auto; height:42px; display:flex; align-items:center; justify-content:center; opacity:0.82;"><img src="uploads/clients/linea.png" alt="Linea Strom" style="max-height:42px; max-width:110px; object-fit:contain; display:block;" /></div>
       <div data-client style="flex:0 0 auto; height:42px; display:flex; align-items:center; justify-content:center; opacity:0.82;"><img src="uploads/clients/vero.png" alt="Vero Shoes" style="max-height:42px; max-width:90px; object-fit:contain; display:block;" /></div>
+      <div data-client style="flex:0 0 auto; height:42px; display:flex; align-items:center; justify-content:center; opacity:0.82;"><img src="uploads/clients/kate.png" alt="Kate" style="max-height:38px; max-width:120px; object-fit:contain; display:block;" /></div>
+      <div data-client style="flex:0 0 auto; height:42px; display:flex; align-items:center; justify-content:center; opacity:0.82;"><img src="uploads/clients/filtrato.png" alt="Filtrato Water Filters" style="max-height:34px; max-width:140px; object-fit:contain; display:block;" /></div>
+      <div data-client style="flex:0 0 auto; height:42px; display:flex; align-items:center; justify-content:center; opacity:0.82;"><img src="uploads/clients/elvi.png" alt="elvi-architects" style="max-height:30px; max-width:140px; object-fit:contain; display:block;" /></div>
       <div data-client style="flex:0 0 auto; height:42px; display:flex; align-items:center; justify-content:center; opacity:0.82;"><img src="uploads/clients/freeshop.png" alt="Free Shop" style="max-height:42px; max-width:110px; object-fit:contain; display:block;" /></div>
       <div data-client style="flex:0 0 auto; height:42px; display:flex; align-items:center; justify-content:center; opacity:0.82;"><img src="uploads/clients/pigikids.png" alt="Pigi Kids" style="max-height:40px; max-width:130px; object-fit:contain; display:block;" /></div>
       <div data-client style="flex:0 0 auto; height:42px; display:flex; align-items:center; justify-content:center; opacity:0.82;"><img src="uploads/clients/flame.png" alt="Brand" style="max-height:40px; max-width:60px; object-fit:contain; display:block;" /></div>
       <div data-client style="flex:0 0 auto; height:42px; display:flex; align-items:center; justify-content:center; opacity:0.82;"><img src="uploads/clients/quinta.png" alt="Quinta" style="max-height:34px; max-width:110px; object-fit:contain; display:block;" /></div>
       <div data-client style="flex:0 0 auto; height:54px; display:flex; align-items:center; justify-content:center; opacity:0.82;"><img src="uploads/clients/americana_mono.png" alt="Americana Burgers & Steaks" style="max-height:54px; max-width:54px; object-fit:contain; display:block;" /></div>
     </div>
+    <div style="text-align:center;"><button data-clients-toggle style="display:none; margin:24px auto 0; background:none; border:1px solid rgba(255,255,255,0.18); color:rgba(245,245,247,0.7); border-radius:100px; padding:9px 20px; font-family:'JetBrains Mono',monospace; font-size:12px; letter-spacing:0.08em;">Δες όλα →</button></div>
   </div>
 
 
@@ -354,8 +409,8 @@
   <footer style="border-top:1px solid rgba(255,255,255,0.08); padding:60px 40px 48px;">
     <div style="max-width:1280px; margin:0 auto; display:flex; align-items:flex-start; justify-content:space-between; gap:40px; flex-wrap:wrap;">
       <div style="display:flex; flex-direction:column; gap:16px; max-width:280px;">
-        <a href="#top" style="display:flex; align-items:baseline; gap:8px; font-weight:600; font-size:19px; letter-spacing:-0.03em;"><span style="position:relative; display:inline-block;">ig<span style="position:absolute; top:0px; left:1px; width:5px; height:5px; border-radius:50%; background:linear-gradient(135deg,#fd672c,#53d6be);"></span></span><span style="font-weight:300; color:rgba(245,245,247,0.55);">digital</span></a>
-        <p style="margin:0; font-size:13px; font-weight:300; line-height:1.55; color:rgba(245,245,247,0.45);">Ψηφιακό στούντιο ανάπτυξης για μάρκες με φιλοδοξία.</p>
+        <a href="#top" style="display:flex; align-items:center; gap:11px; font-weight:600; font-size:18px; letter-spacing:-0.02em;"><span style="display:inline-block; width:10px; height:10px; border-radius:50%; background:linear-gradient(135deg,#fd672c,#53d6be);"></span>ig digital</a>
+        <p style="margin:0; font-size:13px; font-weight:300; line-height:1.55; color:rgba(245,245,247,0.45);">digital growth studio για brands με φιλοδοξία</p>
         <p style="margin:0; font-size:13px; font-weight:300; line-height:1.55; color:rgba(245,245,247,0.45);">Εδέσσης 23, Βέροια, ΤΚ 59131</p>
       </div>
       <div style="display:flex; gap:56px; flex-wrap:wrap;">
@@ -409,22 +464,33 @@ class Component extends DCLogic {
     this.initServiceRows();
     this.initTilt();
     this.initCursorGlow();
+    this.initClientsToggle();
+  }
+
+  initClientsToggle(){
+    const wrap = this.q('[data-clients]');
+    const btn = this.q('[data-clients-toggle]');
+    if(!wrap || !btn) return;
+    wrap.classList.add('collapsed');
+    btn.addEventListener('click', ()=>{
+      const collapsed = wrap.classList.toggle('collapsed');
+      btn.textContent = collapsed ? 'Δες όλα →' : 'Λιγότερα ↑';
+    });
   }
 
   initCursorGlow(){
     const header = this.q('#top');
     const glow = this.q('#cursor-glow');
     if(!header || !glow) return;
-    if(window.matchMedia && window.matchMedia('(pointer:coarse)').matches) return;
     let gx=0, gy=0, tx=0, ty=0, inside=false, idle=null;
     let lastX=0, lastY=0, lastT=0, speed=0;       // px/ms, smoothed
     let curOpacity=0, targetOpacity=0, curScale=0.6;
     const MIN_O=0.32, MAX_O=1.0, SPD=3.2;         // slow → subtle, fast → strong
-    const onMove=(e)=>{
+    const point=(cx,cy,fade)=>{
       const r = header.getBoundingClientRect();
       const now = performance.now();
-      if(e.clientY < r.top || e.clientY > r.bottom){ inside=false; targetOpacity=0; return; }
-      const nx = e.clientX - r.left, ny = e.clientY - r.top;
+      if(cy < r.top || cy > r.bottom){ inside=false; targetOpacity=0; return; }
+      const nx = cx - r.left, ny = cy - r.top;
       const dt = Math.max(1, now - lastT);
       const dist = Math.hypot(nx-lastX, ny-lastY);
       const inst = dist/dt;                         // px per ms
@@ -432,20 +498,27 @@ class Component extends DCLogic {
       lastX=nx; lastY=ny; lastT=now;
       tx=nx; ty=ny;
       if(!inside){ inside=true; gx=tx; gy=ty; }
-      // map speed to opacity — eased so fast moves ramp harder
       const nrm = Math.pow(Math.min(speed,SPD)/SPD, 0.8);
       targetOpacity = Math.min(MAX_O, MIN_O + nrm*(MAX_O-MIN_O));
       clearTimeout(idle);
-      idle = setTimeout(()=>{ targetOpacity=0; speed=0; }, 220);
+      idle = setTimeout(()=>{ targetOpacity=0; speed=0; }, fade);
     };
-    window.addEventListener('mousemove', onMove);
+    const onMove=(e)=> point(e.clientX, e.clientY, 220);
+    const onTouch=(e)=>{ const t=e.touches && e.touches[0]; if(!t) return; targetOpacity=MAX_O; point(t.clientX, t.clientY, 420); };
+    const coarse = window.matchMedia && window.matchMedia('(pointer:coarse)').matches;
+    if(coarse){
+      header.addEventListener('touchstart', onTouch, {passive:true});
+      header.addEventListener('touchmove', onTouch, {passive:true});
+      header.addEventListener('touchend', ()=>{ targetOpacity=0; }, {passive:true});
+    } else {
+      window.addEventListener('mousemove', onMove);
+    }
     const loop=()=>{
       gx += (tx-gx)*0.14; gy += (ty-gy)*0.14;
       speed *= 0.92;                                // decay when no events
       const nrm = Math.pow(Math.min(speed,SPD)/SPD, 0.8);
       const drift = inside ? Math.min(targetOpacity, MIN_O + nrm*(MAX_O-MIN_O)) : 0;
       curOpacity += (drift - curOpacity)*0.14;
-      // fast moves flare bigger and brighter
       const targetScale = inside ? (0.74 + 0.26*(curOpacity/MAX_O) + nrm*0.34) : 0.6;
       curScale += (targetScale - curScale)*0.14;
       glow.style.opacity = curOpacity.toFixed(3);

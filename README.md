@@ -1,114 +1,140 @@
-# Handoff: IG Digital — Premium Agency Site
+# IG Digital — Agency Site
 
-## Overview
-Αυτό είναι το production-ready site της **IG Digital** (igdigital.gr). Είναι ένα **στατικό HTML site** — δεν χρειάζεται build process, framework, ή server-side rendering. Τα αρχεία τρέχουν απευθείας στο browser.
-
-Στόχος: push σε GitHub repo → auto-deploy μέσω Netlify.
-
----
-
-## Σχετικά με τα αρχεία
-Τα `.dc.html` αρχεία **ΕΙΝΑΙ τα production αρχεία** — όχι mockups. Δουλεύουν ως κανονικά HTML αρχεία στον browser, χρησιμοποιώντας το `support.js` runtime που βρίσκεται στο ίδιο directory. Το `support.js` δεν πρέπει ποτέ να επεξεργαστεί χειροκίνητα.
+**Live:** [igdigital.netlify.app](https://igdigital.netlify.app)  
+**Stack:** Static HTML (no build step, no framework)  
+**Languages:** Greek (primary) + English  
+**AI Collaboration:** Claude Code + OpenAI Codex
 
 ---
 
-## Αρχεία & Δομή
+## Δομή αρχείων
 
 ```
 /
-├── index.html                        ← redirect → IG-Digital-Home-GR.dc.html
-├── support.js                        ← DC runtime (μη επεξεργαστείς)
-├── netlify.toml                      ← Netlify config (cache headers κλπ)
-├── IG-Digital-Home-GR.dc.html        ← 🔴 Κύρια σελίδα (Greek homepage)
-├── IG-Digital-Home.dc.html           ← English homepage (v1 baseline)
-├── IG-Digital-Services.dc.html       ← Services subpage (EN)
-├── IG-Digital-Case-Study.dc.html     ← Aurelia case study (EN)
+├── index.html                     ← redirect → IG-Digital-Home-GR.dc.html
+├── support.js                     ← DC runtime (ΜΗΝ επεξεργαστείς)
+├── netlify.toml                   ← cache headers
+├── favicon.svg
+├── og-image.svg / og-image.png    ← Open Graph / social preview
+│
+├── IG-Digital-Home-GR.dc.html     ← 🔴 Κύρια σελίδα (Greek)
+├── IG-Digital-Home.dc.html        ← English homepage
+├── IG-Digital-Services.dc.html    ← Services subpage (EN, draft)
+├── IG-Digital-Case-Study.dc.html  ← Aurelia case study (EN, draft)
+├── IG-Digital-Logo-Concepts.dc.html
 └── uploads/
-    ├── clients/                      ← Processed client logos (λευκά PNG)
-    │   ├── kate.png
-    │   ├── filtrato.png
-    │   ├── herbstore.png
-    │   ├── linea.png
-    │   ├── elvi.png
-    │   ├── uwash.png
-    │   ├── papillon.png
-    │   ├── pythagoras.png
-    │   ├── vero.png
-    │   ├── freeshop.png
-    │   ├── pigikids.png
-    │   ├── flame.png
-    │   ├── quinta.png
-    │   └── americana_mono.png
-    └── [πρωτότυπα logos...]          ← Originals (δεν χρησιμοποιούνται live)
+    └── clients/                   ← Client logos (λευκά transparent PNG)
+        kate.png, filtrato.png, herbstore.png, linea.png,
+        elvi.png, uwash.png, papillon.png, pythagoras.png,
+        vero.png, freeshop.png, pigikids.png, flame.png,
+        quinta.png, americana_mono.png
 ```
 
 ---
 
-## Deploy σε GitHub + Netlify
+## Σημαντικές συμβάσεις (για Claude & Codex)
 
-### Βήμα 1 — Git init & push
+### 1. Τα `.dc.html` είναι τα production αρχεία
+Δεν είναι mockups. Ανοίγουν απευθείας στο browser ως κανονικά HTML. Το `support.js` runtime τα επεξεργάζεται — **μη τροποποιείς το `support.js`**.
 
-```bash
-cd design_handoff_ig_digital_site
+### 2. Bilingual — πάντα και τα δύο
+Κάθε αλλαγή στο `IG-Digital-Home.dc.html` **πρέπει να αντικατοπτρίζεται** και στο `IG-Digital-Home-GR.dc.html`, και αντίστροφα.  
+Μοναδική σκόπιμη διαφορά: το hero section (διαφορετικό περιεχόμενο σε EN vs GR).
 
-git init
-git add .
-git commit -m "initial: IG Digital site"
+### 3. Inline styles — όχι external CSS
+Το layout χτίζεται αποκλειστικά με **inline `style=`** attributes. Δεν υπάρχει εξωτερικό CSS αρχείο. Responsive overrides γίνονται με `@media` κανόνες στο `<style>` block εντός κάθε αρχείου (lines ~30-78).
 
-# Δημιούργησε νέο repo στο github.com με όνομα π.χ. "ig-digital-site"
-# μετά:
-git remote add origin https://github.com/YOUR_USERNAME/ig-digital-site.git
-git branch -M main
-git push -u origin main
+### 4. Data attributes για targeting
+Χρησιμοποιούμε `data-*` attributes για responsive/behavioral targeting:
+
+| Attribute | Χρήση |
+|---|---|
+| `data-desktop-nav` | Nav links — κρύβεται σε mobile (`display:none !important`) |
+| `data-mobile-nav-right` | Lang switcher + Menu button wrapper — φαίνεται μόνο mobile |
+| `data-mobile-toggle` | Το κουμπί «Menu» — `display:block !important` σε mobile |
+| `data-overlay-lang` | Lang link μέσα στο overlay — κρύβεται σε mobile |
+| `data-navlink` | Nav anchor links (active state JS) |
+| `data-magnetic` | Magnetic hover effect |
+| `data-cta-pill` | CTA pill buttons |
+| `data-cta-primary` | Primary CTA button |
+| `data-reveal` | Scroll reveal animation |
+| `data-service` | Service list rows |
+| `data-proc-card` | Process step cards |
+| `data-clients` | Client logos grid |
+| `data-clients-toggle` | «Show more» button για logos |
+| `data-case-visual` | Case study visual block |
+
+### 5. DC template syntax
+Το `support.js` runtime επεξεργάζεται:
+- `{{ variable }}` — template interpolation
+- `<sc-if value="{{ condition }}">` — conditional render
+- `onClick="{{ functionName }}"` — event binding
+
+Παράδειγμα (mobile menu overlay):
+```html
+<sc-if value="{{ menuOpen }}" hint-placeholder-val="{{ false }}">
+  <div>...menu content...</div>
+</sc-if>
 ```
 
-### Βήμα 2 — Netlify
-
-1. Πήγαινε στο [app.netlify.com](https://app.netlify.com)
-2. **«Add new site»** → **«Import from Git»** → GitHub
-3. Επίλεξε το `ig-digital-site` repo
-4. **Build settings:**
-   - Build command: *(άδειο)*
-   - Publish directory: `.`
-5. **«Deploy site»**
-
-Netlify subdomain: από Site settings → Domain management → άλλαξε σε `igdigital.netlify.app`
-
-### Βήμα 3 — Auto-deploy από Claude
-Κάθε φορά που γίνονται αλλαγές στο design (από Claude/Designcompiler):
-```bash
-# copy updated files → git commit → push
-git add .
-git commit -m "update: [περιγραφή αλλαγής]"
-git push
-# Netlify auto-deploys σε ~20 δευτ.
-```
+### 6. Mobile breakpoint: 760px
+Όλα τα responsive overrides στο `@media (max-width:760px)` block. Nav padding αλλάζει σε `16px 20px`, desktop nav κρύβεται, mobile nav εμφανίζεται.
 
 ---
 
-## Brand & Design System
+## Design System
 
 | Token | Τιμή |
 |---|---|
 | Background | `#000000` |
 | Text primary | `#f5f5f7` |
+| Text muted | `rgba(245,245,247,0.45–0.62)` |
 | Accent orange | `#fd672c` |
 | Accent teal | `#53d6be` |
+| Gradient (CTA/logo dot) | `linear-gradient(135deg, #fd672c, #53d6be)` |
 | Font display/body | Sora (Google Fonts) |
 | Font mono/labels | JetBrains Mono (Google Fonts) |
+| Border subtle | `rgba(255,255,255,0.06–0.22)` |
+| Border radius pill | `100px` |
+| Border radius card | `20–28px` |
 
 ---
 
-## Επικοινωνία & Links
-- Email: info@igdigital.gr
-- Τηλέφωνο: +30 697 378 9466
-- Διεύθυνση: Εδέσσης 23, Βέροια, ΤΚ 59131
-- Instagram: https://www.instagram.com/igdigitalgr/
+## Nav structure (mobile)
+
+```
+[ ig digital logo ]        [ EN | ΕΛ   Menu ]
+```
+
+- `EN | ΕΛ` switcher εμφανίζεται στο nav bar (δίπλα στο Menu), **όχι** μέσα στο overlay menu
+- Στο desktop: ο switcher είναι μέσα στο `data-desktop-nav` div μαζί με τα nav links
+- Overlay menu: έχει μόνο τα navigation links + CTA — χωρίς lang switcher
 
 ---
 
-## Σημειώσεις
-- Το site είναι **bilingual** — Greek homepage (`IG-Digital-Home-GR.dc.html`) είναι η κύρια.
-- Το `index.html` κάνει redirect εκεί αυτόματα.
-- Τα 3D objects (Three.js), Lenis smooth scroll, magnetic CTAs, scroll reveals φορτώνουν από CDN — χρειάζεται internet connection.
-- Client logos είναι στο `uploads/clients/` ως λευκά transparent PNG.
+## Deploy
+
+Το site deployer μέσω **Netlify MCP** ή CLI:
+
+```bash
+npx netlify-cli deploy --prod --dir=design_handoff_ig_digital_site2 --site=7379477e-3068-446b-8fae-d5577a21d2e5
+```
+
+Κάθε αλλαγή → deploy χειροκίνητα (δεν υπάρχει auto-deploy από git αυτή τη στιγμή).
+
+---
+
+## Επικοινωνία
+
+| | |
+|---|---|
+| Email | info@igdigital.gr |
+| Τηλέφωνο | +30 697 378 9466 |
+| Διεύθυνση | Εδέσσης 23, Βέροια, ΤΚ 59131 |
+| Instagram | [@igdigitalgr](https://www.instagram.com/igdigitalgr/) |
+
+---
+
+## Ιστορικό αλλαγών
+
+Δες το [CHANGELOG.md](CHANGELOG.md) για λεπτομερές ιστορικό αποφάσεων (τι, γιατί, πώς υλοποιήθηκε).
