@@ -6,6 +6,10 @@
 
 ## 2026-09-22
 
+### Ένας κανόνας για τα χρώματα των νούμερων
+**Τι:** Πορτοκαλί = αύξηση, τιρκουάζ = μείωση, λευκό = ουδέτερο. Διορθώθηκαν: κάρτα Έργου 01 (το Google ROAS ήταν τιρκουάζ «επειδή Google»), hero και πλέγμα αποτελεσμάτων της σελίδας Έργου 01 (αυξήσεις σε τιρκουάζ, επένδυση σε πορτοκαλί). GR + EN.
+**Γιατί:** Υπήρχαν τρεις διαφορετικές λογικές· ο επισκέπτης δεν μπορούσε να διαβάσει τι σημαίνει το χρώμα.
+
 ### SEO / GEO / AEO — έλεγχος και διορθώσεις
 **Βρέθηκαν:** κανένα canonical, κανένα structured data, χωρίς robots.txt / sitemap.xml / llms.txt / σελίδα 404· τίτλοι αρχικής χωρίς «digital marketing agency»· περιγραφή Υπηρεσιών 198 χαρακτήρες· `og:url`/`hreflang` σε διευθύνσεις που κάνουν 301· το intro (ρίζα του site) χωρίς περιγραφή και χωρίς συνδέσμους για crawlers που δεν τρέχουν JS.
 **Τι:** Νέοι τίτλοι/περιγραφές (αρχική, Υπηρεσίες). Script `tools/seo_build.py` που γράφει canonical, hreflang (x-default = ρίζα), og:url στις τελικές διευθύνσεις, JSON-LD (ProfessionalService με τις 7 υπηρεσίες, WebSite, WebPage· Article + BreadcrumbList στα case studies) και παράγει `robots.txt` (ανοιχτό σε μηχανές και AI crawlers, κλειστό για .md και παρκαρισμένες σελίδες), `sitemap.xml` (με hreflang) και `llms.txt`. Intro: περιγραφή, noindex/follow, noscript σύνδεσμοι· index: noscript σύνδεσμοι. Νέα δίγλωσση `404.html` (για τα παλιά URL του WordPress). Footer: «Σχεδιάστηκε από την ig digital». «Κλιμάκωση/Scaling» χωρίς θαυμαστικό.
