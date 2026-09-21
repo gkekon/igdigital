@@ -11,23 +11,26 @@
 
 ```
 /
-├── index.html                     ← redirect → IG-Digital-Home-GR.dc.html
+├── index.html                     ← redirect → intro.html
+├── intro.html                     ← spiral intro · διαλέγει GR/EN για τον επισκέπτη
 ├── support.js                     ← DC runtime (ΜΗΝ επεξεργαστείς)
 ├── netlify.toml                   ← cache headers
-├── favicon.svg
-├── og-image.svg / og-image.png    ← Open Graph / social preview
+├── favicon.svg · og-image.png     ← favicon + προεπισκόπηση αρχικής
+├── og/                            ← προεπισκοπήσεις 1200×630 ανά σελίδα (GR/EN)
 │
-├── IG-Digital-Home-GR.dc.html     ← 🔴 Κύρια σελίδα (Greek)
-├── IG-Digital-Home.dc.html        ← English homepage
-├── IG-Digital-Services.dc.html    ← Services subpage (EN, draft)
-├── IG-Digital-Case-Study.dc.html  ← Aurelia case study (EN, draft)
+├── IG-Digital-Home-GR.dc.html     ← αρχική (GR)
+├── IG-Digital-Home.dc.html        ← αρχική (EN)
+├── IG-Digital-Services-GR.dc.html ← Υπηρεσίες (GR)
+├── IG-Digital-Services.dc.html    ← Services (EN)
+├── IG-Digital-Case-Elegxos.dc.html / -EN      ← Έργο 01 «Απόδοση με έλεγχο»
+├── IG-Digital-Case-Kerdoforia.dc.html / -EN   ← Έργο 02 «Κερδοφορία»
+├── IG-Digital-Case-Study.dc.html  ← παλιά Aurelia (orphaned, μένει ως έχει)
+├── IG-Digital-Home v2.dc.html     ← παλιά εκδοχή (μένει ως έχει)
 ├── IG-Digital-Logo-Concepts.dc.html
 └── uploads/
-    └── clients/                   ← Client logos (λευκά transparent PNG)
-        kate.png, filtrato.png, herbstore.png, linea.png,
-        elvi.png, uwash.png, papillon.png, pythagoras.png,
-        vero.png, freeshop.png, pigikids.png, flame.png,
-        quinta.png, americana_mono.png
+    ├── clients-ordered/           ← 31 λογότυπα πελατών, με τη σειρά του πελάτη (τα ενεργά)
+    ├── clients/                   ← παλιά λογότυπα (δεν χρησιμοποιούνται πια)
+    └── case-studies/              ← παλιά banners/mockups (δεν χρησιμοποιούνται πια)
 ```
 
 ---
@@ -92,7 +95,7 @@
 | Accent orange | `#fd672c` |
 | Accent teal | `#53d6be` |
 | Gradient (CTA/logo dot) | `linear-gradient(135deg, #fd672c, #53d6be)` |
-| Font display/body | Sora (Google Fonts) |
+| Font display/body | Sora (Google Fonts) — χωρίς ελληνικά· stack: `'Sora',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif` |
 | Font mono/labels | JetBrains Mono (Google Fonts) |
 | Border subtle | `rgba(255,255,255,0.06–0.22)` |
 | Border radius pill | `100px` |
@@ -117,10 +120,12 @@
 Το site deployer μέσω **Netlify MCP** ή CLI:
 
 ```bash
-npx netlify-cli deploy --prod --dir=design_handoff_ig_digital_site2 --site=7379477e-3068-446b-8fae-d5577a21d2e5
+netlify deploy --prod --dir=design_handoff_ig_digital_site2 --site=7379477e-3068-446b-8fae-d5577a21d2e5
 ```
 
-Κάθε αλλαγή → deploy χειροκίνητα (δεν υπάρχει auto-deploy από git αυτή τη στιγμή).
+Κάθε αλλαγή → deploy χειροκίνητα (δεν υπάρχει auto-deploy από git). Τρέχει από τον φάκελο `Site design/`. Χρησιμοποίησε το εγκατεστημένο `netlify` (Homebrew) — το `npx netlify-cli` αποτυγχάνει σιωπηλά. Μετά το deploy έλεγξε το live με `curl`.
+
+Πριν από οποιαδήποτε αλλαγή: δες τη λίστα ελέγχου ομοιομορφίας και τις «αποφάσεις του πελάτη» στο `.claude/skills/ig-digital/SKILL.md` (ένα επίπεδο πάνω).
 
 ---
 

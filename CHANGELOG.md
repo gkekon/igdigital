@@ -6,6 +6,10 @@
 
 ## 2026-09-21
 
+### Deploy 21/9 — όλα τα παραπάνω live
+**Τι:** Commit `b34d12c` και deploy στο production (igdigital.netlify.app). Επαληθεύτηκε live: GR Υπηρεσίες, πραγματικές κριτικές (χωρίς ψεύτικες), 31 λογότυπα, font stack με Segoe UI, `lang`, OG images στο `<head>`.
+**Παρατήρηση:** Το `npx netlify-cli deploy` απέτυχε σιωπηλά (exit 1, χωρίς μήνυμα). Το deploy έγινε με το εγκατεστημένο `netlify` (Homebrew, v26). Μετά από κάθε deploy επαληθεύουμε με `curl` στο live — το «δεν έβγαλε σφάλμα» δεν αρκεί. Το GitHub (`origin`) **δεν** έχει γίνει push.
+
 ### Γραμματοσειρά: σωστό fallback για τα ελληνικά σε κάθε πλατφόρμα
 **Τι:** Το font stack έγινε `'Sora',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif` σε 9 σελίδες (25 σημεία). Τα λατινικά μένουν Sora. Τα ελληνικά: SF Pro σε Apple (και στον Chrome σε Mac, που πριν έβγαζε Helvetica), Roboto σε Android, **Segoe UI στα Windows (πριν: Arial)**.
 **Γιατί:** Η Sora δεν έχει ελληνικά· στα Windows τα ελληνικά έβγαιναν σε Arial. Ο πελάτης κράτησε τη λύση «γραμματοσειρά συστήματος» (του αρέσει σε iPhone/Android) αντί για ελληνικό webfont.
