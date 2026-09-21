@@ -6,6 +6,11 @@
 
 ## 2026-09-22
 
+### SEO / GEO / AEO — έλεγχος και διορθώσεις
+**Βρέθηκαν:** κανένα canonical, κανένα structured data, χωρίς robots.txt / sitemap.xml / llms.txt / σελίδα 404· τίτλοι αρχικής χωρίς «digital marketing agency»· περιγραφή Υπηρεσιών 198 χαρακτήρες· `og:url`/`hreflang` σε διευθύνσεις που κάνουν 301· το intro (ρίζα του site) χωρίς περιγραφή και χωρίς συνδέσμους για crawlers που δεν τρέχουν JS.
+**Τι:** Νέοι τίτλοι/περιγραφές (αρχική, Υπηρεσίες). Script `tools/seo_build.py` που γράφει canonical, hreflang (x-default = ρίζα), og:url στις τελικές διευθύνσεις, JSON-LD (ProfessionalService με τις 7 υπηρεσίες, WebSite, WebPage· Article + BreadcrumbList στα case studies) και παράγει `robots.txt` (ανοιχτό σε μηχανές και AI crawlers, κλειστό για .md και παρκαρισμένες σελίδες), `sitemap.xml` (με hreflang) και `llms.txt`. Intro: περιγραφή, noindex/follow, noscript σύνδεσμοι· index: noscript σύνδεσμοι. Νέα δίγλωσση `404.html` (για τα παλιά URL του WordPress). Footer: «Σχεδιάστηκε από την ig digital». «Κλιμάκωση/Scaling» χωρίς θαυμαστικό.
+**Εκκρεμεί:** (1) καθαρά URL (π.χ. /el/ti-kanoume) μαζί με το domain· (2) στο Google Business Profile ο ΤΚ είναι **591 32**, στο site **59131** — να επιβεβαιωθεί ο σωστός (NAP consistency)· (3) για AEO: ενότητα «Συχνές ερωτήσεις» με ορατό περιεχόμενο + FAQ schema· (4) αριθμοί/χώρες για το Strategy design.
+
 ### Sentence case σε όλους τους τίτλους υπηρεσιών
 **Τι:** Κεφαλαίο μόνο στο πρώτο γράμμα (Strategy design, Branding & identity, Performance & targeting, Content & film, Digital experience · Branding & ταυτότητα, Περιεχόμενο & film, Ψηφιακή εμπειρία) στην αρχική και στη σελίδα Υπηρεσιών· και στις κάρτες «Η ειδικότητά μας» (Performance campaigns / Performance καμπάνιες).
 **Γιατί:** Ήταν ανακατεμένα. Sentence case = Apple-style, ίδιο με όλους τους μεγάλους τίτλους του site, και το σωστό για τα ελληνικά.
