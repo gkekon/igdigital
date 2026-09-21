@@ -6,6 +6,10 @@
 
 ## 2026-09-22
 
+### Υπηρεσίες: 7 αντί για 9 · «What we do»
+**Τι:** EN μενού/footer: «What we do» (αντί «We do What?», που στα αγγλικά διαβάζεται σαν ειρωνεία). Ενώθηκαν Targeting + Performance → «Performance Campaigns & Targeting» / «Performance καμπάνιες & στόχευση», και AI Search + Digital Experience → «Websites & Search Visibility» / «Sites & ορατότητα» (SEO · GEO · AEO μέσα στο κείμενο, e-shops μέσω συνεργάτη). Πρώτη υπηρεσία EN: «We start with you» (GR μένει «Γινόμαστε ένα με εσάς»). Kicker σελίδας: «Services»/«Υπηρεσίες». Νέες εικόνες προεπισκόπησης.
+**Γιατί:** Απόφαση πελάτη — πιο σφιχτή λίστα, χωρίς ακρωνύμια ως τίτλους.
+
 ### Υπηρεσίες: νέοι τίτλοι και ειλικρινές εύρος
 **Τι:** «Understanding & Becoming One With You» · «Brand Design & Identity» / «Brand Design & Ταυτότητα» · το Search έγινε «AI Search Optimization» / «Ορατότητα σε Google & AI» (SEO · GEO · AEO) · Digital Experience: sites και landing pages από εμάς, **e-shops μέσω έμπιστου συνεργάτη** · Κλιμάκωση: «όταν κάτι πετυχαίνει, δεν επαναπαυόμαστε — το κλιμακώνουμε». Αρχική + σελίδα Υπηρεσιών, GR + EN.
 **Γιατί:** Ο πελάτης δεν φτιάχνει e-shops in-house και θέλει να προσφέρει SEO/GEO/AEO ως νέα υπηρεσία· το προηγούμενο κείμενο υποσχόταν «Web & commerce».
