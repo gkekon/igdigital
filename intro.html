@@ -12,7 +12,7 @@
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
     html, body { width: 100%; height: 100%; background: #000; overflow: hidden; }
-    body { font-family: 'Sora', -apple-system, sans-serif; -webkit-font-smoothing: antialiased; }
+    body { font-family:'Sora',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif; -webkit-font-smoothing: antialiased; }
 
     #wrap {
       position: fixed;
@@ -133,9 +133,25 @@
 <button id="skip">Skip →</button>
 
 <script>
+// ---- ΓΛΩΣΣΑ ΕΠΙΣΚΕΠΤΗ ----
+// 1) ό,τι επέλεξε ο ίδιος στο site  2) ζώνη ώρας Ελλάδας/Κύπρου  3) γλώσσα συσκευής
+function visitorLang() {
+  try { const saved = localStorage.getItem('ig-lang'); if (saved === 'el' || saved === 'en') return saved; } catch (e) {}
+  try {
+    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
+    if (['Europe/Athens', 'Asia/Nicosia', 'Asia/Famagusta', 'Europe/Nicosia'].includes(tz)) return 'el';
+  } catch (e) {}
+  const langs = navigator.languages || [navigator.language || ''];
+  return langs.some(l => (l || '').toLowerCase().startsWith('el')) ? 'el' : 'en';
+}
+const LANG = visitorLang();
+const HOME = LANG === 'el' ? 'IG-Digital-Home-GR.dc.html' : 'IG-Digital-Home.dc.html';
+document.documentElement.lang = LANG;
+if (LANG === 'el') document.getElementById('skip').textContent = 'Παράλειψη →';
+
 // Skip intro on same-session revisits (refresh, back button)
 if (sessionStorage.getItem('ig-intro-done')) {
-  window.location.replace('IG-Digital-Home.dc.html');
+  window.location.replace(HOME);
 }
 
 // ---- MATH UTILS ----
@@ -299,7 +315,7 @@ function render() {
 // ---- NAVIGATION ----
 function navigateToSite() {
   sessionStorage.setItem('ig-intro-done', '1');
-  window.location.href = 'IG-Digital-Home.dc.html';
+  window.location.href = HOME;
 }
 
 // ---- GSAP TIMELINE ----

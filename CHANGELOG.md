@@ -4,6 +4,85 @@
 
 ---
 
+## 2026-09-21
+
+### Γραμματοσειρά: σωστό fallback για τα ελληνικά σε κάθε πλατφόρμα
+**Τι:** Το font stack έγινε `'Sora',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif` σε 9 σελίδες (25 σημεία). Τα λατινικά μένουν Sora. Τα ελληνικά: SF Pro σε Apple (και στον Chrome σε Mac, που πριν έβγαζε Helvetica), Roboto σε Android, **Segoe UI στα Windows (πριν: Arial)**.
+**Γιατί:** Η Sora δεν έχει ελληνικά· στα Windows τα ελληνικά έβγαιναν σε Arial. Ο πελάτης κράτησε τη λύση «γραμματοσειρά συστήματος» (του αρέσει σε iPhone/Android) αντί για ελληνικό webfont.
+**Παρατήρηση:** Aurelia, Home v2 και Logo Concepts δεν άλλαξαν (εκτός scope).
+
+### Μεγάλο πέρασμα: μαρτυρίες, λογότυπα, GR Υπηρεσίες, γλώσσα επισκέπτη, animation, προεπισκοπήσεις
+**Τι:**
+- **Μαρτυρίες:** αφαιρέθηκαν οι ψεύτικες (Dana Reyes, Idris Bello, Sofia Lind). Μπήκαν οι 4 πραγματικές κριτικές Google με κείμενο (NagaCommerce πρώτη, Pesmatzoglou Ilias, Giota Spiridou, Nikos Kotsalidis) + ένδειξη «5,0 στο Google · 5 κριτικές». EN μεταφρασμένες.
+- **Λογότυπα:** 31 λογότυπα με τη σειρά του φακέλου `logo πελατων με σειρα`, λευκά/διάφανα, ίσο οπτικό βάρος, στο `uploads/clients-ordered/`. Desktop: όλα ανοιχτά. Κινητό: μένει όπως στο live — λίγα + «Δείτε όλα» (απόφαση πελάτη, μινιμαλιστικό look). Αφαιρέθηκαν όσα δεν είναι στη νέα λίστα (U wash, Linea Strom, elvi, Kate, Free Shop, Flame, Quinta, Americana) — τα αρχεία τους έμειναν στο `uploads/clients/`.
+- **Νέα σελίδα `IG-Digital-Services-GR.dc.html`**· όλες οι ελληνικές σελίδες (14 σύνδεσμοι) δείχνουν εκεί.
+- **Γλώσσα επισκέπτη:** το `intro.html` διαλέγει GR/EN (προηγούμενη επιλογή → ζώνη ώρας Ελλάδας/Κύπρου → γλώσσα συσκευής).
+- **Animation:** τα SVG visuals (2 κάρτες αρχικής + 4 σελίδες case) σχηματίζονται στο scroll προς τα κάτω και μαζεύονται όταν φεύγουν, ξαναπαίζοντας στο scroll προς τα πάνω. Αλλαγή μηχανισμού από CSS `width` σε `transform:scaleX` για συμβατότητα με Safari.
+- **Διαδικασία:** οι 4 τίτλοι (Ακούμε/Εστιάζουμε/Χτίζουμε/Κλιμακώνουμε) στοιχισμένοι στην ίδια ευθεία.
+- **«spend» → «δαπάνη»** σε όλες τις ελληνικές σελίδες.
+- **Προεπισκοπήσεις:** 6 εικόνες 1200×630 στο `og/` (case 01/02 + Υπηρεσίες, GR/EN) + `hreflang` σε όλα τα ζεύγη σελίδων. Όλα τα SEO/OG tags (και της αρχικής) μεταφέρθηκαν από το `<helmet>` στο πραγματικό `<head>`, για να τα διαβάζουν WhatsApp/Viber/LinkedIn.
+**Γιατί:** Αιτήματα πελάτη (12 σημεία, 21/9).
+**Παρατήρηση:** Η Sora δεν έχει ελληνικά — τα ελληνικά αποδίδονται με τη γραμματοσειρά του συστήματος. Δεν άλλαξε ακόμα, εκκρεμεί απόφαση.
+
+## 2026-08-29
+
+### Έργο 01 (Έλεγχος): νέο SVG visual στο ύφος του site, GR+EN, home & landing
+**Τι:** Το PNG banner του Έργου 01 αντικαταστάθηκε από SVG «Από τον θόρυβο στη γραμμή»: μπλεγμένες λεπτές γραμμές (θολά σήματα ενός σύνθετου account) συγκλίνουν σε έναν κόμβο ελέγχου και βγαίνουν δύο καθαρές παράλληλες κορδέλες που ανεβαίνουν (πορτοκαλί = Meta, τιρκουάζ = Google). Landing: σχηματίζεται στο scroll (`initSvgAnim`, ίδιο μοτίβο με το Έργο 02). Αρχική: split κάρτα ίδια με του Έργου 02, νέο σύντομο copy, 4 metrics. Και οι δύο κάρτες πήραν κοινό ελάχιστο ύψος· στο κινητό τα metrics μπαίνουν 2×2 (`.case-metrics`) και το visual χρησιμοποιεί τον υπάρχοντα κανόνα `data-case-visual` (240px).
+**Γιατί:** Ενιαία οπτική γλώσσα στα case studies, χωρίς βαριά AI-generated banners.
+**Παρατήρηση:** `uploads/case-studies/elegxos-banner.png` δεν αναφέρεται πουθενά πια· δεν διαγράφηκε.
+
+### Audit GR/EN — διορθώσεις κειμένου
+**Τι:** Ορθογραφικό «ΚΥΛΗΣΗ»→«ΚΥΛΙΣΗ»· «Δες όλα»→«Δείτε όλα» (ενιαίος πληθυντικός ευγενείας)· Elegxos GR: αμετάφραστο «PAID MEDIA INVESTMENT», ενοποίηση «Μ.Ο./ΜΕΣΗ ΑΞΙΑ ΚΑΛΑΘΙΟΥ», «7,37x»→«7,37×», ελληνικό alt· Elegxos EN: «One more controlled» (διαβαζόταν «άλλο ένα»)→«A more controlled», curly apostrophes, «catalogue» (UK spelling όπως το υπόλοιπο site)· Kerdoforia GR: αγγλικές ετικέτες στο strip→ελληνικές· κάρτα αρχικής GR ευθυγραμμίστηκε με το νέο lede· `lang="el"/"en"` σε όλες τις σελίδες· Services: έλειπε εντελώς `<title>` και meta description.
+**Γιατί:** Audit συνέπειας GR↔EN πριν το deploy.
+
+### Έργο 02 (Κερδοφορία): νέο copy + hand-drawn SVG visual, GR+EN, home & landing
+**Τι:** Ξαναγράφτηκε ολόκληρο το κείμενο του case study «Κερδοφορία» (Έργο 02) με βάση διορθώσεις του ιδρυτή, και το banner PNG (1.7MB) αντικαταστάθηκε από hand-authored SVG σε όλα τα σημεία που εμφανίζεται: την κάρτα `#work` στο home (GR+EN) και το hero visual της landing σελίδας (GR+EN).
+- Νέος τίτλος: «Δεν χρειαζόταν περισσότερες πωλήσεις. Χρειαζόταν καλύτερες.» (πριν: «Από τον τζίρο στην κερδοφορία»).
+- Landing σελίδα αναδιαρθρώθηκε σε 8 sections: hero, SVG visual, πρόκληση+στοιχεία, αποτέλεσμα (2 ομάδες: εμπορικά / paid media, 8 metrics), «το πιο δυνατό αποτέλεσμα», προσέγγιση (3 κάρτες: Profit before ROAS / Product mix before discount / Efficiency before scale), εμπορική αλλαγή (7-metric strip + safe profitability framing), νέο statement.
+- Το SVG visual («η ψαλίδα» — δύο κορδέλες που ανοίγουν, τζίρος↑ vs εκπτώσεις↓) έχει 3 στρώματα βάθους, σχηματίζεται μπαίνοντας στο κάδρο (`initSvgAnim` στο DC script της landing σελίδας), και honoreί `prefers-reduced-motion`.
+- Η κάρτα `#work` στο home έγινε split-layout (visual SVG αριστερά, copy+metrics δεξιά) αντί για μονολιθικό banner· ίδιο SVG concept σε στατική μορφή, με δικά της gradient ids (`wk-*`, χωρίς σύγκρουση με τα `k-*` της landing).
+
+**Γιατί:** Ο ιδρυτής έστειλε νέο, πιο ακριβές κείμενο (7 metrics αντί για 4, νέο framing γύρω από profit-first vs revenue-first, εναλλακτικό «safe» profitability paragraph αντί για μοντελοποιημένο +44%). Παράλληλα ζητήθηκε πιο minimal/premium/αφαιρετικό visual στο ύφος του site, με βάθος (dark-light 3D) και κίνηση στο scroll — το PNG banner δεν κάλυπτε κανένα από τα δύο.
+
+**Πώς υλοποιήθηκε:** SVG χτισμένο από το μηδέν (χωρίς εξωτερικές βιβλιοθήκες), 3 layers (`.far`/`.mid`/`.near`) με ξεχωριστό parallax μέσω `--p` custom property ενημερωμένο σε scroll (rAF-throttled). Entrance μέσω CSS class toggle (`.svg-in`) που πυροδοτείται από IntersectionObserver. Το EN mirror μεταφράστηκε πλήρως (φυσικά αγγλικά, όχι literal), με δεκαδικά σε τελεία. Διορθώθηκε en route ένα προϋπάρχον bug στο language switcher του EN case-study αρχείου (ο σύνδεσμος προς το GR έγραφε «EN» αντί για «ΕΛ» — προέκυψε επειδή το EN χτίστηκε πάνω στη δομή του GR).
+
+**Παρατήρηση:** Το `uploads/case-studies/kerdoforia-banner.png` έμεινε στον δίσκο αλλά δεν αναφέρεται πουθενά πια — δεν διαγράφηκε (ίδια λογική με το ορφανό Aurelia page: αναμονή επιβεβαίωσης πριν διαγραφεί τίποτα). Το Έργο 01 (Elegxos) παραμένει ανέγγιχτο, ίδιο PNG banner όπως πριν — καθαρά επιλογή του ιδρυτή να ξεκινήσουμε από το Έργο 02. **Deploy GR + EN μαζί, μετά την έγκριση του πελάτη.**
+
+---
+
+## 2026-07-24
+
+### EN mirror των case studies + mobile Services
+**Τι:** Ολοκληρώθηκε το αγγλικό mirror των δύο πραγματικών case studies και διορθώθηκε η mobile συμπεριφορά της σελίδας Services.
+- Το `#work` του `IG-Digital-Home.dc.html` χρησιμοποιεί πλέον τα δύο πραγματικά banner cards αντί για τα placeholders Aurelia / Fintech / Hospitality.
+- Δημιουργήθηκαν τα `IG-Digital-Case-Elegxos-EN.dc.html` και `IG-Digital-Case-Kerdoforia-EN.dc.html` με φυσική αγγλική απόδοση, ίδια δομή/assets/metrics και αγγλική μορφή δεκαδικών.
+- Τα language switches των τεσσάρων case pages συνδέουν πλέον απευθείας τη σωστή GR/EN εκδοχή.
+- Το `IG-Digital-Services.dc.html` απέκτησε mobile breakpoint 760px, responsive single-column grids και hamburger navigation με overlay.
+
+**Γιατί:** Το EN site έδειχνε ακόμη ψεύτικα placeholder έργα, ενώ η Services σελίδα παρουσίαζε horizontal overflow και μη λειτουργικό desktop nav σε μικρές οθόνες.
+
+**Πώς υλοποιήθηκε:** Έγινε mirror του εγκεκριμένου GR `#work`, μετάφραση πάνω στα υπάρχοντα GR case templates χωρίς αλλαγή σε layout, colors, data attributes ή DC scripts, και αντιγραφή του καθιερωμένου `menuOpen` / mobile-nav μοτίβου από το Elegxos case study στη Services.
+
+**Παρατήρηση:** Το `support.js` έμεινε ανέγγιχτο. Το CTA της Services που έδειχνε στην παλιά Aurelia σελίδα επαναδρομολογήθηκε σε `IG-Digital-Home.dc.html#work` («View case studies →»), ώστε κανένα link να μη στέλνει σε ψεύτικο περιεχόμενο. Η Aurelia (`IG-Digital-Case-Study.dc.html`) κρατήθηκε ως έχει (απόφαση πελάτη) — orphaned πλέον. Ο hamburger κώδικας είναι πανομοιότυπος με το production home· δεν είναι click-testable μέσα από το preview automation (το DC synthetic-event δεν πυροδοτείται — ίδια συμπεριφορά και στο live home), χρειάζεται tap-test σε πραγματική συσκευή. **Deploy GR + EN μαζί.** Εκκρεμούν πραγματικές μαρτυρίες (#voices) από τον πελάτη.
+
+### Δύο πραγματικά case studies + banner cards στο #work
+**Τι:** Δημιουργήθηκαν 2 νέες GR case study σελίδες και το `#work` section του GR home δείχνει τώρα σε αυτές με τα banners του πελάτη.
+- `IG-Digital-Case-Elegxos.dc.html` — «Απόδοση με έλεγχο» (Έργο 01, φυσικά προϊόντα / performance· +13,3% τζίρος, 7,37× Meta ROAS, 4,47× Google ROAS)
+- `IG-Digital-Case-Kerdoforia.dc.html` — «Από τον τζίρο στην κερδοφορία» (Έργο 02, αθλητικό e-shop / profit-first· +11,3% τζίρος, −31,5% εκπτώσεις, +31,9% Meta ROAS)
+
+**Γιατί:** Ο ιδρυτής (αδερφός του πελάτη) έστειλε 2 πραγματικά case studies (κείμενο .docx + banner + full-page mockup). Αντικατέστησαν τα placeholder «Έργα 01/02/03» (Aurelia/Fintech/Hospitality).
+
+**Πώς υλοποιήθηκε:**
+- Χτισμένες από το μηδέν σε responsive HTML (όχι embedded εικόνες κειμένου), ίδια design tokens / cursor / reveal / tilt / scrollbar με το υπόλοιπο site.
+- Δομή: hero (breadcrumb + τίτλος + hero-stats) → banner ως visual poster → πρόκληση + στοιχεία συνεργασίας → grid αποτελεσμάτων (6–7 metrics) → «Η προσέγγιση» (3 κινήσεις) → statement → τελικό CTA → footer.
+- **Mobile-first:** hamburger nav + overlay + `@media (max-width:760px)` block. Grids καταρρέουν 3-4→2→1 στήλες, μηδέν horizontal overflow (ελέγχθηκε 402px iPhone 17 Pro + 1280px desktop).
+- `#work` (GR): 2 banner cards (`uploads/case-studies/*-banner.png`), self-contained, χωρίς footer (το banner περιέχει τα πάντα). Κρατούν `data-case` για tilt/hover.
+- Πεδίο ΠΕΛΑΤΗΣ: **χωρίς** «Ανώνυμο» (πιο confident· η ανωνυμία δηλώνεται στη σημείωση μέτρησης).
+
+**Παρατήρηση:** EN mirror (home #work + 2 EN case pages) και mobile fix σε Services/παλιά Aurelia σελίδα → μηχανική δουλειά, spec στο `CODEX-HANDOFF.md`. Εκκρεμεί: οι Μαρτυρίες (#voices) έχουν ψεύτικα ονόματα αποδιδόμενα σε «Έργο 01/02/03» — θέλουν πραγματικό περιεχόμενο.
+
+---
+
 ## 2026-06-25
 
 ### Mobile nav: lang switcher μετακινήθηκε δίπλα στο Menu button
