@@ -6,6 +6,10 @@
 
 ## 2026-09-22
 
+### Sentence case σε όλους τους τίτλους υπηρεσιών
+**Τι:** Κεφαλαίο μόνο στο πρώτο γράμμα (Strategy design, Branding & identity, Performance & targeting, Content & film, Digital experience · Branding & ταυτότητα, Περιεχόμενο & film, Ψηφιακή εμπειρία) στην αρχική και στη σελίδα Υπηρεσιών· και στις κάρτες «Η ειδικότητά μας» (Performance campaigns / Performance καμπάνιες).
+**Γιατί:** Ήταν ανακατεμένα. Sentence case = Apple-style, ίδιο με όλους τους μεγάλους τίτλους του site, και το σωστό για τα ελληνικά.
+
 ### Υπηρεσίες: τελικοί τίτλοι
 **Τι:** «Branding & Identity» / «Branding & Ταυτότητα» και «Performance & Targeting» / «Performance & στόχευση» (πιο σύντομα). Τελική λίστα: We start with you · Strategy Design · Branding & Identity · Performance & Targeting · Content & Film · Digital Experience · Scaling!
 
