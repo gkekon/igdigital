@@ -4,6 +4,24 @@
 
 ---
 
+## 2026-09-22
+
+### Υπηρεσίες → «We do What?» / «Τι κάνουμε;» με 9 ενότητες
+**Τι:** Στο μενού (υπολογιστής + κινητό) το «Services»/«Υπηρεσίες» έγινε «We do What?»/«Τι κάνουμε;». Η σελίδα έχει τίτλο «What we do.»/«Τι κάνουμε.» και 9 ενότητες με τη σειρά του πελάτη: Understanding & becoming one with you · Strategy Design · Branding & Identity · Detailed Targeting · Performance Campaigns · Search & Discovery · Content & Film · Digital Experience · Scaling! Τα υπάρχοντα κείμενα κρατήθηκαν αυτούσια· Targeting και Scaling πήραν τις περιγραφές που ήδη υπήρχαν στην αρχική· νέα κείμενα για Understanding (από το κείμενο του πελάτη) και Strategy Design (εμπειρία ΕΕ & ΗΠΑ). Βγήκε το Lifecycle & CRM. Νέες εικόνες προεπισκόπησης, τίτλοι και περιγραφές.
+**Γιατί:** Αίτημα πελάτη.
+**Παρατήρηση:** Η λίστα «01 — Τι κάνουμε» στην αρχική έχει ακόμα τις 6 παλιές υπηρεσίες (με Lifecycle & CRM) — να ευθυγραμμιστεί; Το footer γράφει ακόμα «Services»/«Υπηρεσίες».
+
+### Φόρμα επικοινωνίας: στέλνει πραγματικά (Netlify Forms)
+**Τι:** Η φόρμα δεν έστελνε τίποτα — απλώς έδειχνε «Ευχαριστούμε». Τώρα: πεδία με όνομα, `data-netlify` + honeypot κατά του spam, αποστολή με fetch, «Αποστολή…» / «Ευχαριστούμε» μόνο αν πέτυχε / «Δεν στάλθηκε» αν αποτύχει. Ενεργοποιήθηκε η αναγνώριση φορμών στο Netlify (ήταν κλειστή) και ειδοποίηση email στο **info@igdigital.gr**. Δοκιμή από το live αποθηκεύτηκε κανονικά (όχι spam).
+
+### Domain igdigital.gr — προετοιμασία στο Netlify
+**Τι:** Δημιουργήθηκε ζώνη DNS igdigital.gr στο Netlify (nameservers dns1–dns4.p01.nsone.net) με **όλες** τις εγγραφές του email που ζει στον cPanel server της intechs (46.62.175.92, srv25.intechs.gr): MX → mail.igdigital.gr, mail/webmail/autodiscover/autoconfig/cpanel/whm/webdisk/ftp/cpcalendars/cpcontacts A, SPF, DKIM (default._domainkey), DMARC, SRV για autodiscover/caldav/carddav. Το site έχει igdigital.gr (κύριο) + www.igdigital.gr.
+**Γιατί:** Ο developer που έχει το domain στην intechs ζήτησε DNS servers. Αν άλλαζαν χωρίς αυτές τις εγγραφές, θα σταματούσαν τα email (και οι ειδοποιήσεις της φόρμας).
+**Εκκρεμεί:** η intechs αλλάζει nameservers → μετά: έλεγχος SSL, ενημέρωση `og:url`/`hreflang`/canonical από igdigital.netlify.app σε https://igdigital.gr, redirects για τα παλιά URL του WordPress. Ο hosting λογαριασμός στην intechs πρέπει να μείνει ενεργός (εκεί είναι τα email). Τα email apps πρέπει να χρησιμοποιούν **mail.igdigital.gr** ως server, όχι σκέτο igdigital.gr.
+
+### Backup
+Πλήρες αντίγραφο (με git) + full-page screenshots desktop/κινητό όλων των σελίδων στο `IG DIGITAL/backup/igdigital-site-2026-09-22/`, πριν από τις αλλαγές της 22/9.
+
 ## 2026-09-21
 
 ### Κουμπί «Δωρεάν strategy call · 30′» σε όλες τις σελίδες · Μενού/Κλείσιμο · πελάτης Έργου 01
