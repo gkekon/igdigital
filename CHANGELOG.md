@@ -6,6 +6,9 @@
 
 ## 2026-09-22
 
+### Υπηρεσίες: τελικοί τίτλοι
+**Τι:** «Branding & Identity» / «Branding & Ταυτότητα» και «Performance & Targeting» / «Performance & στόχευση» (πιο σύντομα). Τελική λίστα: We start with you · Strategy Design · Branding & Identity · Performance & Targeting · Content & Film · Digital Experience · Scaling!
+
 ### Υπηρεσίες: 7 αντί για 9 · «What we do»
 **Τι:** EN μενού/footer: «What we do» (αντί «We do What?», που στα αγγλικά διαβάζεται σαν ειρωνεία). Ενώθηκαν Targeting + Performance → «Performance Campaigns & Targeting» / «Performance καμπάνιες & στόχευση», και AI Search + Digital Experience → ενιαία υπηρεσία με τίτλο «Digital Experience» / «Ψηφιακή Εμπειρία» (επιλογή πελάτη, πιο κομψό)· η περιγραφή λέει sites & landing pages που τα βρίσκουν Google και AI (SEO · GEO · AEO), e-shops μέσω συνεργάτη. Πρώτη υπηρεσία EN: «We start with you» (GR μένει «Γινόμαστε ένα με εσάς»). Kicker σελίδας: «Services»/«Υπηρεσίες». Νέες εικόνες προεπισκόπησης.
 **Γιατί:** Απόφαση πελάτη — πιο σφιχτή λίστα, χωρίς ακρωνύμια ως τίτλους.
