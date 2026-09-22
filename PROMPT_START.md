@@ -12,11 +12,9 @@
 [Γράψε εδώ τι θέλεις να κάνουμε]
 ```
 
-## Εκκρεμότητες (22/9/2026)
-- Domain igdigital.gr: να αλλάξει η intechs τους nameservers σε dns1–dns4.p01.nsone.net. Μετά: SSL, `python3 tools/seo_build.py https://igdigital.gr`, καθαρά URL, redirects για τα παλιά WordPress URL.
-- Ταχυδρομικός κώδικας: site 59131 / Google προφίλ 591 32 — ποιος είναι σωστός;
-- Συχνές ερωτήσεις (AEO) — χρειάζονται απαντήσεις από τον ιδρυτή.
+## Εκκρεμότητες (22/9/2026, βράδυ)
+- Domain igdigital.gr: να αλλάξει η intechs τους nameservers σε dns1–dns4.p01.nsone.net. Μετά: SSL, `python3 tools/seo_build.py https://igdigital.gr`, redirects για τα παλιά WordPress URL.
+- FAQ: έτοιμο προς έγκριση — ο ιδρυτής να επιβεβαιώσει κόστος (δαπάνη χωριστά), χρόνους αποτελεσμάτων, περιεχόμενο πρότασης.
 - Αριθμοί για το Strategy design (χρόνια / χώρες / κλάδοι).
-- Λογότυπο στα αγγλικά: 00a ή 00b (ο πελάτης συγκρίνει).
 - Εικόνα προεπισκόπησης αρχικής σε νέο ύφος (προαιρετικό).
 - Να επιβεβαιωθεί ότι ήρθε στο info@igdigital.gr το δοκιμαστικό email της φόρμας.

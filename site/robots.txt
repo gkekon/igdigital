@@ -1,7 +1,6 @@
 # ig digital — search engines and AI assistants are welcome
 User-agent: *
 Allow: /
-Disallow: /*.md$
 Disallow: /IG-Digital-Case-Study
 Disallow: /ig-digital-case-study
 Disallow: /IG-Digital-Home%20v2

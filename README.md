@@ -1,6 +1,6 @@
 # IG Digital — Agency Site
 
-**Live:** [igdigital.netlify.app](https://igdigital.netlify.app)  
+**Live:** [igdigital.netlify.app](https://igdigital.netlify.app) (→ igdigital.gr μόλις αλλάξουν οι nameservers)  
 **Stack:** Static HTML (no build step, no framework)  
 **Languages:** Greek (primary) + English  
 **AI Collaboration:** Claude Code + OpenAI Codex
@@ -9,39 +9,50 @@
 
 ## Δομή αρχείων
 
+Το repo έχει **δύο επίπεδα**: τα εσωτερικά έγγραφα μένουν στη ρίζα και **δεν ανεβαίνουν**· ό,τι ανεβαίνει στο Netlify είναι μέσα στο `site/`.
+
 ```
-/
-├── index.html                     ← redirect → intro.html
-├── intro.html                     ← spiral intro · διαλέγει GR/EN για τον επισκέπτη
-├── support.js                     ← DC runtime (ΜΗΝ επεξεργαστείς)
-├── netlify.toml                   ← cache headers
-├── favicon.svg · og-image.png     ← favicon + προεπισκόπηση αρχικής
-├── og/                            ← προεπισκοπήσεις 1200×630 ανά σελίδα (GR/EN)
-│
-├── IG-Digital-Home-GR.dc.html     ← αρχική (GR)
-├── IG-Digital-Home.dc.html        ← αρχική (EN)
-├── IG-Digital-Services-GR.dc.html ← Υπηρεσίες (GR)
-├── IG-Digital-Services.dc.html    ← Services (EN)
-├── IG-Digital-Case-Elegxos.dc.html / -EN      ← Έργο 01 «Απόδοση με έλεγχο»
-├── IG-Digital-Case-Kerdoforia.dc.html / -EN   ← Έργο 02 «Κερδοφορία»
-├── IG-Digital-Case-Study.dc.html  ← παλιά Aurelia (orphaned, μένει ως έχει)
-├── IG-Digital-Home v2.dc.html     ← παλιά εκδοχή (μένει ως έχει)
-├── IG-Digital-Logo-Concepts.dc.html
-└── uploads/
-    ├── clients-ordered/           ← 31 λογότυπα πελατών, με τη σειρά του πελάτη (τα ενεργά)
-    ├── clients/                   ← παλιά λογότυπα (δεν χρησιμοποιούνται πια)
-    └── case-studies/              ← παλιά banners/mockups (δεν χρησιμοποιούνται πια)
+design_handoff_ig_digital_site2/
+├── README.md · CHANGELOG.md · PROMPT_START.md · CODEX-HANDOFF.md   ← εσωτερικά, ΔΕΝ ανεβαίνουν
+├── netlify.toml                                                    ← publish = "site"
+└── site/                                  ← ο φάκελος του deploy
+    ├── index.html                         ← spiral intro (ρίζα /) · διαλέγει GR/EN για τον επισκέπτη
+    ├── 404.html · _redirects              ← σελίδα 404 · 301 από τα παλιά URL στα νέα
+    ├── support.js                         ← DC runtime (ΜΗΝ επεξεργαστείς)
+    ├── vendor/                            ← React 18.3.1 · ReactDOM · Lenis (τοπικά, για ταχύτητα)
+    ├── _headers                           ← cache: /vendor ένας χρόνος, assets μία εβδομάδα, σελίδες ποτέ
+    ├── favicon.svg · og-image.png · og/   ← favicon + προεπισκοπήσεις 1200×630 (GR/EN)
+    ├── robots.txt · sitemap.xml · llms.txt  ← τα γράφει το tools/seo_build.py
+    │
+    ├── el/index.html                      → /el/                        αρχική (GR)
+    ├── en/index.html                      → /en/                        αρχική (EN)
+    ├── el/ti-kanoume.html                 → /el/ti-kanoume              Υπηρεσίες (GR)
+    ├── en/what-we-do.html                 → /en/what-we-do              Services (EN)
+    ├── el/erga/apodosi-me-elegxo.html     → /el/erga/apodosi-me-elegxo  Έργο 01 (GR)
+    ├── en/work/performance-under-control.html → /en/work/performance-under-control  Έργο 01 (EN)
+    ├── el/erga/kerdoforia.html            → /el/erga/kerdoforia         Έργο 02 (GR)
+    ├── en/work/profit-first.html          → /en/work/profit-first       Έργο 02 (EN)
+    │
+    ├── IG-Digital-Case-Study.dc.html      ← παλιά Aurelia (παρκαρισμένη, μένει ως έχει)
+    ├── IG-Digital-Home v2.dc.html         ← παλιά εκδοχή (μένει ως έχει)
+    ├── IG-Digital-Logo-Concepts.dc.html
+    └── uploads/
+        ├── clients-ordered/               ← 31 λογότυπα πελατών, με τη σειρά του πελάτη (τα ενεργά)
+        ├── clients/                       ← παλιά λογότυπα (δεν χρησιμοποιούνται πια)
+        └── case-studies/                  ← παλιά banners/mockups (δεν χρησιμοποιούνται πια)
 ```
+
+**Διαδρομές:** όλοι οι σύνδεσμοι και τα assets είναι απόλυτα από τη ρίζα (`/el/ti-kanoume`, `/el/#contact`, `/uploads/…`, `/support.js`), γιατί οι σελίδες ζουν σε υποφακέλους. Το Netlify σερβίρει το `el/ti-kanoume.html` ως `/el/ti-kanoume` και το `el/index.html` ως `/el/`.
 
 ---
 
 ## Σημαντικές συμβάσεις (για Claude & Codex)
 
-### 1. Τα `.dc.html` είναι τα production αρχεία
-Δεν είναι mockups. Ανοίγουν απευθείας στο browser ως κανονικά HTML. Το `support.js` runtime τα επεξεργάζεται — **μη τροποποιείς το `support.js`**.
+### 1. Οι σελίδες είναι DC αρχεία (production)
+Από 22/9 έχουν κατάληξη `.html` (όχι `.dc.html`) για καθαρά URL — παραμένουν DC σελίδες (`<x-dc>` + `support.js`). Δεν είναι mockups. Ανοίγουν απευθείας στο browser ως κανονικά HTML. Το `support.js` runtime τα επεξεργάζεται — **μη τροποποιείς το `support.js`**.
 
 ### 2. Bilingual — πάντα και τα δύο
-Κάθε αλλαγή στο `IG-Digital-Home.dc.html` **πρέπει να αντικατοπτρίζεται** και στο `IG-Digital-Home-GR.dc.html`, και αντίστροφα.  
+Κάθε αλλαγή στο `site/en/…` **πρέπει να αντικατοπτρίζεται** και στο αντίστοιχο `site/el/…`, και αντίστροφα.  
 Μοναδική σκόπιμη διαφορά: το hero section (διαφορετικό περιεχόμενο σε EN vs GR).
 
 ### 3. Inline styles — όχι external CSS
@@ -120,7 +131,7 @@
 Το site deployer μέσω **Netlify MCP** ή CLI:
 
 ```bash
-netlify deploy --prod --dir=design_handoff_ig_digital_site2 --site=7379477e-3068-446b-8fae-d5577a21d2e5
+netlify deploy --prod --dir=design_handoff_ig_digital_site2/site --site=7379477e-3068-446b-8fae-d5577a21d2e5
 ```
 
 Κάθε αλλαγή → deploy χειροκίνητα (δεν υπάρχει auto-deploy από git). Τρέχει από τον φάκελο `Site design/`. Χρησιμοποίησε το εγκατεστημένο `netlify` (Homebrew) — το `npx netlify-cli` αποτυγχάνει σιωπηλά. Μετά το deploy έλεγξε το live με `curl`.
@@ -135,7 +146,7 @@ netlify deploy --prod --dir=design_handoff_ig_digital_site2 --site=7379477e-3068
 |---|---|
 | Email | info@igdigital.gr |
 | Τηλέφωνο | +30 697 378 9466 |
-| Διεύθυνση | Εδέσσης 23, Βέροια, ΤΚ 59131 |
+| Διεύθυνση | Εδέσσης 23, Βέροια, ΤΚ 591 32 |
 | Instagram | [@igdigitalgr](https://www.instagram.com/igdigitalgr/) |
 
 ---

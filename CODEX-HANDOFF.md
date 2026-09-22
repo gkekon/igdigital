@@ -1,3 +1,5 @@
+> **ΙΣΤΟΡΙΚΟ ΕΓΓΡΑΦΟ (Ιούλιος 2026).** Από 22/9/2026 οι σελίδες ζουν στο `site/` με καθαρά URL (π.χ. `IG-Digital-Home-GR.dc.html` → `site/el/index.html`). Τα ονόματα αρχείων παρακάτω είναι τα παλιά — δες το README.
+
 # Codex Handoff — Case Studies & Mobile Responsiveness
 
 **Ημερομηνία:** 2026-07-24

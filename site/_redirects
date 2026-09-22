@@ -1,0 +1,45 @@
+# ig digital — permanent redirects from the old file-name URLs to the clean ones.
+# Every old spelling (original, lowercase, Netlify's pretty '.dc' form) is listed.
+
+/intro.html  /  301
+/intro  /  301
+
+/IG-Digital-Home-GR.dc.html  /el/  301
+/ig-digital-home-gr.dc.html  /el/  301
+/IG-Digital-Home-GR.dc  /el/  301
+/ig-digital-home-gr.dc  /el/  301
+
+/IG-Digital-Home.dc.html  /en/  301
+/ig-digital-home.dc.html  /en/  301
+/IG-Digital-Home.dc  /en/  301
+/ig-digital-home.dc  /en/  301
+
+/IG-Digital-Services-GR.dc.html  /el/ti-kanoume  301
+/ig-digital-services-gr.dc.html  /el/ti-kanoume  301
+/IG-Digital-Services-GR.dc  /el/ti-kanoume  301
+/ig-digital-services-gr.dc  /el/ti-kanoume  301
+
+/IG-Digital-Services.dc.html  /en/what-we-do  301
+/ig-digital-services.dc.html  /en/what-we-do  301
+/IG-Digital-Services.dc  /en/what-we-do  301
+/ig-digital-services.dc  /en/what-we-do  301
+
+/IG-Digital-Case-Elegxos.dc.html  /el/erga/apodosi-me-elegxo  301
+/ig-digital-case-elegxos.dc.html  /el/erga/apodosi-me-elegxo  301
+/IG-Digital-Case-Elegxos.dc  /el/erga/apodosi-me-elegxo  301
+/ig-digital-case-elegxos.dc  /el/erga/apodosi-me-elegxo  301
+
+/IG-Digital-Case-Elegxos-EN.dc.html  /en/work/performance-under-control  301
+/ig-digital-case-elegxos-en.dc.html  /en/work/performance-under-control  301
+/IG-Digital-Case-Elegxos-EN.dc  /en/work/performance-under-control  301
+/ig-digital-case-elegxos-en.dc  /en/work/performance-under-control  301
+
+/IG-Digital-Case-Kerdoforia.dc.html  /el/erga/kerdoforia  301
+/ig-digital-case-kerdoforia.dc.html  /el/erga/kerdoforia  301
+/IG-Digital-Case-Kerdoforia.dc  /el/erga/kerdoforia  301
+/ig-digital-case-kerdoforia.dc  /el/erga/kerdoforia  301
+
+/IG-Digital-Case-Kerdoforia-EN.dc.html  /en/work/profit-first  301
+/ig-digital-case-kerdoforia-en.dc.html  /en/work/profit-first  301
+/IG-Digital-Case-Kerdoforia-EN.dc  /en/work/profit-first  301
+/ig-digital-case-kerdoforia-en.dc  /en/work/profit-first  301
