@@ -1,52 +1,22 @@
 # Starter Prompt — IG Digital Site
 
-Κάνε copy-paste αυτό στην αρχή κάθε νέας συζήτησης.
-
----
-
-## Για Claude Code
+Κάνε copy-paste αυτό στην αρχή κάθε νέας συζήτησης (Claude Code, φάκελος `Site design/`).
 
 ```
-Δουλεύουμε στο site της IG Digital. Το project βρίσκεται στο:
-/Users/konstantinosgkekopoulos/Documents/Επιχειρηση/IG DIGITAL/Site design/design_handoff_ig_digital_site2/
-
+Συνεχίζουμε το site της IG Digital.
 Διάβασε πρώτα:
-1. README.md — conventions, δομή, design system
-2. CHANGELOG.md — ιστορικό αποφάσεων
-
-Κύριοι κανόνες:
-- Κάθε αλλαγή εφαρμόζεται και στα δύο: IG-Digital-Home.dc.html + IG-Digital-Home-GR.dc.html
-- Μόνο inline styles — δεν υπάρχει external CSS
-- Μη αγγίξεις το support.js
-- Mobile breakpoint: 760px
-
-Live site: https://igdigital.netlify.app
+1. το skill ig-digital (Site design/.claude/skills/ig-digital/SKILL.md) — κανόνες, λίστα ομοιομορφίας, αποφάσεις πελάτη, εκκρεμότητες
+2. design_handoff_ig_digital_site2/CHANGELOG.md — τι έγινε και γιατί
+3. τη μνήμη σου για το «IG Digital site»
 
 [Γράψε εδώ τι θέλεις να κάνουμε]
 ```
 
----
-
-## Για Codex / ChatGPT
-
-```
-You are working on the IG Digital agency website. Static HTML project, no framework, no build step.
-
-Project files are in: design_handoff_ig_digital_site2/
-
-Start by reading:
-1. README.md — conventions, file structure, design system
-2. CHANGELOG.md — history of decisions and why they were made
-
-Key rules:
-- Every change must be mirrored to BOTH: IG-Digital-Home.dc.html (EN) and IG-Digital-Home-GR.dc.html (GR)
-- Layout is built entirely with inline styles — no external CSS file
-- Never edit support.js (it's the DC runtime)
-- Responsive overrides live in the <style> block inside each file, @media (max-width:760px)
-- Mobile breakpoint: 760px
-
-Live site: https://igdigital.netlify.app
-Deploy: npx netlify-cli deploy --prod --dir=design_handoff_ig_digital_site2 --site=7379477e-3068-446b-8fae-d5577a21d2e5
-
-Task: [describe what you want to do]
-```
+## Εκκρεμότητες (22/9/2026)
+- Domain igdigital.gr: να αλλάξει η intechs τους nameservers σε dns1–dns4.p01.nsone.net. Μετά: SSL, `python3 tools/seo_build.py https://igdigital.gr`, καθαρά URL, redirects για τα παλιά WordPress URL.
+- Ταχυδρομικός κώδικας: site 59131 / Google προφίλ 591 32 — ποιος είναι σωστός;
+- Συχνές ερωτήσεις (AEO) — χρειάζονται απαντήσεις από τον ιδρυτή.
+- Αριθμοί για το Strategy design (χρόνια / χώρες / κλάδοι).
+- Λογότυπο στα αγγλικά: 00a ή 00b (ο πελάτης συγκρίνει).
+- Εικόνα προεπισκόπησης αρχικής σε νέο ύφος (προαιρετικό).
+- Να επιβεβαιωθεί ότι ήρθε στο info@igdigital.gr το δοκιμαστικό email της φόρμας.
